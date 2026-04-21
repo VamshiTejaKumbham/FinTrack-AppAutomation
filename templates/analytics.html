@@ -24,7 +24,7 @@
                             {% for data in monthly_data %}
                             <tr>
                                 <td>{{ data.month }} {{ data.year }}</td>
-                                <td style="font-weight: 600; color: #3498db;">${{ "%.2f"|format(data.total) }}</td>
+                                <td style="font-weight: 600; color: #3498db;">₹{{ "%.2f"|format(data.total) }}</td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -46,7 +46,7 @@
                 <div style="margin-bottom: 1.5rem;">
                     <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
                         <span style="font-weight: 500;">{{ category }}</span>
-                        <strong>${{ "%.2f"|format(amount) }}</strong>
+                        <strong>₹{{ "%.2f"|format(amount) }}</strong>
                     </div>
                     <div class="progress">
                         <div class="progress-bar" role="progressbar" 
@@ -56,7 +56,7 @@
                 </div>
                 {% endfor %}
                 <div style="text-align: center; padding-top: 1rem; border-top: 1px solid #ecf0f1; margin-top: 1rem;">
-                    <strong style="color: #3498db;">Total: ${{ "%.2f"|format(total_amount) }}</strong>
+                    <strong style="color: #3498db;">Total: ₹{{ "%.2f"|format(total_amount) }}</strong>
                 </div>
                 {% else %}
                 <p style="text-align: center; color: #7f8c8d;">No expenses yet</p>
@@ -75,13 +75,13 @@
         <div class="row text-center">
             <div class="col-md-6 col-lg-3 mb-3 mb-lg-0">
                 <div style="padding-bottom: 1rem;">
-                    <h3 style="color: #3498db;">${{ "%.2f"|format(monthly_data[-1].total if monthly_data else 0) }}</h3>
+                    <h3 style="color: #3498db;">₹{{ "%.2f"|format(monthly_data[-1].total if monthly_data else 0) }}</h3>
                     <p style="color: #7f8c8d; margin: 0;">This Month</p>
                 </div>
             </div>
             <div class="col-md-6 col-lg-3 mb-3 mb-lg-0">
                 <div style="padding-bottom: 1rem;">
-                    <h3 style="color: #3498db;">${{ "%.2f"|format((monthly_data | sum(attribute='total')) / 12 if monthly_data else 0) }}</h3>
+                    <h3 style="color: #3498db;">₹{{ "%.2f"|format((monthly_data | sum(attribute='total')) / 12 if monthly_data else 0) }}</h3>
                     <p style="color: #7f8c8d; margin: 0;">Monthly Avg</p>
                 </div>
             </div>
@@ -93,7 +93,7 @@
             </div>
             <div class="col-md-6 col-lg-3">
                 <div style="padding-bottom: 1rem;">
-                    <h3 style="color: #3498db;">${{ "%.2f"|format(category_totals | sum(attribute=1) if category_totals else 0) }}</h3>
+                    <h3 style="color: #3498db;">₹{{ "%.2f"|format(category_totals | sum(attribute=1) if category_totals else 0) }}</h3>
                     <p style="color: #7f8c8d; margin: 0;">Total Spent</p>
                 </div>
             </div>
