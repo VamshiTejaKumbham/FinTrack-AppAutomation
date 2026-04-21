@@ -1,0 +1,290 @@
+{
+  "id": null,
+  "uid": "fintrack-main",
+  "title": "FinTrack - Operations Dashboard",
+  "description": "Live metrics for the FinTrack expense tracker",
+  "tags": ["fintrack", "flask", "production"],
+  "timezone": "browser",
+  "refresh": "15s",
+  "time": { "from": "now-30m", "to": "now" },
+  "panels": [
+    {
+      "id": 1,
+      "title": "HTTP Request Rate (req/sec)",
+      "description": "Uses flask_http_request_duration_seconds_count — the real metric name from prometheus_flask_exporter.",
+      "type": "timeseries",
+      "gridPos": { "x": 0, "y": 0, "w": 12, "h": 8 },
+      "targets": [
+        {
+          "expr": "sum(rate(flask_http_request_duration_seconds_count[5m])) by (method)",
+          "legendFormat": "{{ method }}",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "reqps",
+          "color": { "mode": "palette-classic" },
+          "custom": { "lineWidth": 2 }
+        }
+      },
+      "options": { "tooltip": { "mode": "multi" } }
+    },
+    {
+      "id": 2,
+      "title": "HTTP Error Rate (%)",
+      "description": "Percentage of 5xx responses.",
+      "type": "timeseries",
+      "gridPos": { "x": 12, "y": 0, "w": 12, "h": 8 },
+      "targets": [
+        {
+          "expr": "100 * sum(rate(flask_http_request_duration_seconds_count{status=~\"5..\"}[5m])) / sum(rate(flask_http_request_duration_seconds_count[5m]))",
+          "legendFormat": "Error %",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "value": null, "color": "green" },
+              { "value": 1, "color": "yellow" },
+              { "value": 5, "color": "red" }
+            ]
+          },
+          "custom": { "lineWidth": 2 }
+        }
+      }
+    },
+    {
+      "id": 3,
+      "title": "Response Latency — p50 / p95 / p99",
+      "description": "Percentile latencies from flask_http_request_duration_seconds histogram.",
+      "type": "timeseries",
+      "gridPos": { "x": 0, "y": 8, "w": 12, "h": 8 },
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.50, rate(flask_http_request_duration_seconds_bucket[5m]))",
+          "legendFormat": "p50",
+          "refId": "A"
+        },
+        {
+          "expr": "histogram_quantile(0.95, rate(flask_http_request_duration_seconds_bucket[5m]))",
+          "legendFormat": "p95",
+          "refId": "B"
+        },
+        {
+          "expr": "histogram_quantile(0.99, rate(flask_http_request_duration_seconds_bucket[5m]))",
+          "legendFormat": "p99",
+          "refId": "C"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": { "unit": "s", "custom": { "lineWidth": 2 } }
+      }
+    },
+    {
+      "id": 4,
+      "title": "DB Query Duration (p95)",
+      "description": "95th percentile of fintrack_db_query_duration_seconds histogram.",
+      "type": "timeseries",
+      "gridPos": { "x": 12, "y": 8, "w": 12, "h": 8 },
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.95, rate(fintrack_db_query_duration_seconds_bucket[5m]))",
+          "legendFormat": "p95 DB latency",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "value": null, "color": "green" },
+              { "value": 0.1, "color": "yellow" },
+              { "value": 0.5, "color": "red" }
+            ]
+          },
+          "custom": { "lineWidth": 2 }
+        }
+      }
+    },
+    {
+      "id": 5,
+      "title": "Expenses Created (by category)",
+      "description": "Our custom counter fintrack_expenses_created_total, labelled by category.",
+      "type": "timeseries",
+      "gridPos": { "x": 0, "y": 16, "w": 12, "h": 8 },
+      "targets": [
+        {
+          "expr": "fintrack_expenses_created_total",
+          "legendFormat": "{{ category }}",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": { "mode": "palette-classic" },
+          "custom": { "lineWidth": 2 }
+        }
+      }
+    },
+    {
+      "id": 6,
+      "title": "Login Events",
+      "description": "Successful vs failed logins per 5 minute window.",
+      "type": "timeseries",
+      "gridPos": { "x": 12, "y": 16, "w": 12, "h": 8 },
+      "targets": [
+        {
+          "expr": "increase(fintrack_login_success_total[5m])",
+          "legendFormat": "Successful (per 5m)",
+          "refId": "A"
+        },
+        {
+          "expr": "increase(fintrack_login_failure_total[5m])",
+          "legendFormat": "Failed (per 5m)",
+          "refId": "B"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": { "unit": "short", "custom": { "lineWidth": 2 } }
+      }
+    },
+    {
+      "id": 7,
+      "title": "Registered Users",
+      "description": "fintrack_registered_users_total gauge — updated on every dashboard page load.",
+      "type": "stat",
+      "gridPos": { "x": 0, "y": 24, "w": 6, "h": 6 },
+      "targets": [
+        {
+          "expr": "fintrack_registered_users_total",
+          "legendFormat": "Users",
+          "refId": "A",
+          "instant": true
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "value": null, "color": "blue" }]
+          }
+        }
+      },
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "colorMode": "background",
+        "graphMode": "none"
+      }
+    },
+    {
+      "id": 8,
+      "title": "Total Expenses Created",
+      "description": "Sum of fintrack_expenses_created_total across all categories.",
+      "type": "stat",
+      "gridPos": { "x": 6, "y": 24, "w": 6, "h": 6 },
+      "targets": [
+        {
+          "expr": "sum(fintrack_expenses_created_total)",
+          "legendFormat": "Total",
+          "refId": "A",
+          "instant": true
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "value": null, "color": "green" }]
+          }
+        }
+      },
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "colorMode": "background",
+        "graphMode": "none"
+      }
+    },
+    {
+      "id": 9,
+      "title": "CSV Exports",
+      "description": "fintrack_csv_exports_total counter — increments on every CSV download.",
+      "type": "stat",
+      "gridPos": { "x": 12, "y": 24, "w": 6, "h": 6 },
+      "targets": [
+        {
+          "expr": "fintrack_csv_exports_total",
+          "legendFormat": "Exports",
+          "refId": "A",
+          "instant": true
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "value": null, "color": "purple" }]
+          }
+        }
+      },
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "colorMode": "background",
+        "graphMode": "none"
+      }
+    },
+    {
+      "id": 10,
+      "title": "App Uptime",
+      "description": "1 = Prometheus can reach /metrics. 0 = app is unreachable.",
+      "type": "stat",
+      "gridPos": { "x": 18, "y": 24, "w": 6, "h": 6 },
+      "targets": [
+        {
+          "expr": "up{job=\"fintrack\"}",
+          "legendFormat": "Status",
+          "refId": "A",
+          "instant": true
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "value": null, "color": "red" },
+              { "value": 1, "color": "green" }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": { "0": { "text": "DOWN" }, "1": { "text": "UP" } }
+            }
+          ]
+        }
+      },
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "colorMode": "background",
+        "graphMode": "none"
+      }
+    }
+  ],
+  "schemaVersion": 38,
+  "version": 2
+}

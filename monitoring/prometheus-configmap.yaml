@@ -1,0 +1,111 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  namespace: monitoring        
+  labels:
+    app: prometheus
+
+data:
+ 
+  prometheus.yml: |
+    global:
+      scrape_interval: 15s        # Visit each target every 15 seconds
+      evaluation_interval: 15s    # Evaluate alert rules every 15 seconds
+
+    rule_files:
+      - /etc/prometheus/alerts.yml
+
+    scrape_configs:
+ 
+      - job_name: 'prometheus'
+        static_configs:
+          - targets: ['localhost:9090']
+ 
+      - job_name: 'fintrack'
+        kubernetes_sd_configs:
+          - role: pod               # Discover Kubernetes pods
+            namespaces:
+              names: ['default']    # Only look in the 'default' namespace
+ 
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+            action: keep
+            regex: "true"
+ 
+          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_port]
+            action: replace
+            target_label: __address__
+            regex: (.+)
+            replacement: ${1}
+
+          - source_labels: [__meta_kubernetes_pod_ip,
+                            __meta_kubernetes_pod_annotation_prometheus_io_port]
+            action: replace
+            target_label: __address__
+            regex: (.+);(.+)
+            replacement: $1:$2
+ 
+          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+            action: replace
+            target_label: __metrics_path__
+            regex: (.+)
+ 
+          - source_labels: [__meta_kubernetes_pod_name]
+            action: replace
+            target_label: pod
+ 
+          - source_labels: [__meta_kubernetes_namespace]
+            action: replace
+            target_label: namespace
+ 
+  alerts.yml: |
+    groups:
+      - name: fintrack_alerts
+        rules:
+ 
+          - alert: FinTrackHighErrorRate
+            expr: |
+              (
+                rate(flask_http_request_total{status=~"5.."}[5m])
+                /
+                rate(flask_http_request_total[5m])
+              ) > 0.05
+            for: 2m          # Must be true for 2 continuous minutes before firing
+            labels:
+              severity: critical
+              app: fintrack
+            annotations:
+              summary: "FinTrack error rate is above 5%"
+              description: >
+                {{ $value | humanizePercentage }} of requests are returning
+                5xx errors. Check pod logs: kubectl logs -l app=fintrack
+
+          - alert: FinTrackHighLatency
+            expr: |
+              histogram_quantile(
+                0.95,
+                rate(flask_http_request_duration_seconds_bucket[5m])
+              ) > 0.5
+            for: 5m
+            labels:
+              severity: warning
+              app: fintrack
+            annotations:
+              summary: "FinTrack p95 latency is above 500ms"
+              description: >
+                95th percentile response time is {{ $value | humanizeDuration }}.
+                Check database query performance.
+ 
+          - alert: FinTrackPodCountLow
+            expr: |
+              count(up{job="fintrack"}) < 2
+            for: 1m
+            labels:
+              severity: critical
+              app: fintrack
+            annotations:
+              summary: "FinTrack has fewer than 2 pods running"
+              description: >
+                Only {{ $value }} pod(s) running. Expected 2.
+                Run: kubectl get pods -l app=fintrack

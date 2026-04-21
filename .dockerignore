@@ -1,0 +1,34 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Virtual environments  
+venv/
+env/
+.env/
+
+# Local database 
+instance/
+
+# Git and IDE files
+.git/
+.gitignore
+.vscode/
+.idea/
+
+# Docker files 
+Dockerfile
+docker-compose.yml
+docker-compose.override.yml
+
+# Test files
+tests/
+pytest.ini
+.coverage
+
+# Documentation
+*.md
+docs/

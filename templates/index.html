@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <!-- Hero Section -->
+        <div style="text-align: center; padding: 3rem 0;">
+            <h1 style="font-size: 2.5rem; margin-bottom: 1rem;">FinTrack</h1>
+            <p style="font-size: 1.1rem; color: #7f8c8d; margin-bottom: 3rem;">
+                Simple, elegant expense tracking for mindful financial management
+            </p>
+        </div>
+
+        <!-- Features Grid -->
+        <div class="row mb-5">
+            <div class="col-md-4 mb-3">
+                <div class="stat-card">
+                    <div style="font-size: 2rem; margin-bottom: 1rem;">
+                        <i class="fas fa-plus-circle" style="color: #3498db;"></i>
+                    </div>
+                    <h5>Track Easily</h5>
+                    <p style="color: #7f8c8d; margin: 0;">Add, edit, and categorize your expenses with ease</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="stat-card">
+                    <div style="font-size: 2rem; margin-bottom: 1rem;">
+                        <i class="fas fa-chart-line" style="color: #3498db;"></i>
+                    </div>
+                    <h5>Analyze Spending</h5>
+                    <p style="color: #7f8c8d; margin: 0;">View detailed analytics and spending patterns</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="stat-card">
+                    <div style="font-size: 2rem; margin-bottom: 1rem;">
+                        <i class="fas fa-download" style="color: #3498db;"></i>
+                    </div>
+                    <h5>Export Data</h5>
+                    <p style="color: #7f8c8d; margin: 0;">Download your data as CSV anytime</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA Buttons -->
+        <div style="text-align: center; margin-top: 3rem;">
+            <a class="btn btn-primary btn-lg me-3" href="{{ url_for('register') }}">
+                Get Started
+            </a>
+            <a class="btn btn-secondary btn-lg" href="{{ url_for('login') }}">
+                Sign In
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

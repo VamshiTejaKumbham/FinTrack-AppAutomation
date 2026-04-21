@@ -1,0 +1,296 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-config
+  namespace: monitoring
+  labels:
+    app: grafana
+data:
+  datasource.yml: |
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        access: proxy
+        url: http://prometheus-service.monitoring.svc.cluster.local:9090
+        isDefault: true          # Use this datasource by default in new panels
+        editable: false          # Prevent accidental changes in the UI
+        jsonData:
+          timeInterval: "15s"    # Match Prometheus scrape interval
+
+  dashboards.yml: |
+    apiVersion: 1
+    providers:
+      - name: FinTrack Dashboards
+        type: file
+        disableDeletion: true         # Don't delete dashboards when file is removed
+        updateIntervalSeconds: 30     # Re-check for new dashboard files every 30s
+        allowUiUpdates: false         # Dashboard edits in UI don't override the file
+        options:
+          path: /etc/grafana/provisioning/dashboards
+  
+  fintrack.json: |
+    {
+      "id": null,
+      "uid": "fintrack-main",
+      "title": "FinTrack - Operations Dashboard",
+      "description": "Live metrics for the FinTrack expense tracker",
+      "tags": ["fintrack", "flask", "production"],
+      "timezone": "browser",
+      "refresh": "30s",
+      "time": { "from": "now-1h", "to": "now" },
+      "panels": [
+
+        {
+          "id": 1,
+          "title": "HTTP Request Rate (requests/sec)",
+          "description": "Total HTTP requests per second across all routes. Spikes indicate traffic bursts.",
+          "type": "timeseries",
+          "gridPos": { "x": 0, "y": 0, "w": 12, "h": 8 },
+          "targets": [
+            {
+              "expr": "sum(rate(flask_http_request_total[5m])) by (method)",
+              "legendFormat": "{{ method }}",
+              "refId": "A"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "reqps",
+              "color": { "mode": "palette-classic" }
+            }
+          },
+          "options": { "tooltip": { "mode": "multi" } }
+        },
+
+        {
+          "id": 2,
+          "title": "HTTP Error Rate (%)",
+          "description": "Percentage of requests returning 5xx errors. Alert fires above 5%.",
+          "type": "timeseries",
+          "gridPos": { "x": 12, "y": 0, "w": 12, "h": 8 },
+          "targets": [
+            {
+              "expr": "100 * sum(rate(flask_http_request_total{status=~\"5..\"}[5m])) / sum(rate(flask_http_request_total[5m]))",
+              "legendFormat": "Error %",
+              "refId": "A"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percent",
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  { "value": null, "color": "green" },
+                  { "value": 1, "color": "yellow" },
+                  { "value": 5, "color": "red" }
+                ]
+              },
+              "custom": { "lineWidth": 2 }
+            }
+          }
+        },
+
+        {
+          "id": 3,
+          "title": "Response Latency (p50 / p95 / p99)",
+          "description": "Percentile response times. p95 > 500ms triggers the latency alert.",
+          "type": "timeseries",
+          "gridPos": { "x": 0, "y": 8, "w": 12, "h": 8 },
+          "targets": [
+            {
+              "expr": "histogram_quantile(0.50, rate(flask_http_request_duration_seconds_bucket[5m]))",
+              "legendFormat": "p50",
+              "refId": "A"
+            },
+            {
+              "expr": "histogram_quantile(0.95, rate(flask_http_request_duration_seconds_bucket[5m]))",
+              "legendFormat": "p95",
+              "refId": "B"
+            },
+            {
+              "expr": "histogram_quantile(0.99, rate(flask_http_request_duration_seconds_bucket[5m]))",
+              "legendFormat": "p99",
+              "refId": "C"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": { "unit": "s" }
+          }
+        },
+
+        {
+          "id": 4,
+          "title": "DB Query Duration (p95)",
+          "description": "95th percentile SQLite query time. Values above 100ms suggest slow queries.",
+          "type": "timeseries",
+          "gridPos": { "x": 12, "y": 8, "w": 12, "h": 8 },
+          "targets": [
+            {
+              "expr": "histogram_quantile(0.95, rate(fintrack_db_query_duration_seconds_bucket[5m]))",
+              "legendFormat": "p95 DB latency",
+              "refId": "A"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "s",
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  { "value": null, "color": "green" },
+                  { "value": 0.1, "color": "yellow" },
+                  { "value": 0.5, "color": "red" }
+                ]
+              }
+            }
+          }
+        },
+
+        {
+          "id": 5,
+          "title": "Expenses Created (by category)",
+          "description": "Cumulative count of expenses added, broken down by category.",
+          "type": "timeseries",
+          "gridPos": { "x": 0, "y": 16, "w": 12, "h": 8 },
+          "targets": [
+            {
+              "expr": "fintrack_expenses_created_total",
+              "legendFormat": "{{ category }}",
+              "refId": "A"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short",
+              "color": { "mode": "palette-classic" }
+            }
+          }
+        },
+
+        {
+          "id": 6,
+          "title": "Login Events",
+          "description": "Successful vs failed login attempts over time.",
+          "type": "timeseries",
+          "gridPos": { "x": 12, "y": 16, "w": 12, "h": 8 },
+          "targets": [
+            {
+              "expr": "rate(fintrack_login_success_total[5m])",
+              "legendFormat": "Successful logins/s",
+              "refId": "A"
+            },
+            {
+              "expr": "rate(fintrack_login_failure_total[5m])",
+              "legendFormat": "Failed logins/s",
+              "refId": "B"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": { "unit": "ops" }
+          }
+        },
+
+        {
+          "id": 7,
+          "title": "Running Pods",
+          "description": "Number of FinTrack pods currently up and scraped by Prometheus.",
+          "type": "stat",
+          "gridPos": { "x": 0, "y": 24, "w": 6, "h": 6 },
+          "targets": [
+            {
+              "expr": "count(up{job=\"fintrack\"})",
+              "legendFormat": "Pods",
+              "refId": "A"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short",
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  { "value": null, "color": "red" },
+                  { "value": 1, "color": "yellow" },
+                  { "value": 2, "color": "green" }
+                ]
+              },
+              "mappings": []
+            }
+          },
+          "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "background" }
+        },
+
+        {
+          "id": 8,
+          "title": "Registered Users",
+          "description": "Total registered users in the FinTrack database.",
+          "type": "stat",
+          "gridPos": { "x": 6, "y": 24, "w": 6, "h": 6 },
+          "targets": [
+            {
+              "expr": "fintrack_registered_users_total",
+              "legendFormat": "Users",
+              "refId": "A"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short",
+              "color": { "mode": "thresholds" },
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [{ "value": null, "color": "blue" }]
+              }
+            }
+          },
+          "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "background" }
+        },
+
+        {
+          "id": 9,
+          "title": "CSV Exports",
+          "description": "Total number of expense CSV files downloaded.",
+          "type": "stat",
+          "gridPos": { "x": 12, "y": 24, "w": 6, "h": 6 },
+          "targets": [
+            {
+              "expr": "fintrack_csv_exports_total",
+              "legendFormat": "Exports",
+              "refId": "A"
+            }
+          ],
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short",
+              "color": { "mode": "thresholds" },
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [{ "value": null, "color": "purple" }]
+              }
+            }
+          },
+          "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "background" }
+        },
+
+        {
+          "id": 10,
+          "title": "Active Alerts",
+          "description": "Firing alert rules from Prometheus. Green = all clear.",
+          "type": "alertlist",
+          "gridPos": { "x": 18, "y": 24, "w": 6, "h": 6 },
+          "options": {
+            "alertName": "",
+            "dashboardAlerts": false,
+            "maxItems": 10,
+            "sortOrder": 1,
+            "stateFilter": { "firing": true, "pending": true }
+          }
+        }
+
+      ],
+
+      "schemaVersion": 38,
+      "version": 1
+    }

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fintrack-config
+  namespace: default
+  labels:
+    app: fintrack
+data:
+  FLASK_ENV: "production"
+  GUNICORN_WORKERS: "3"
+  GUNICORN_BIND: "0.0.0.0:5000"
+  LOG_LEVEL: "INFO"

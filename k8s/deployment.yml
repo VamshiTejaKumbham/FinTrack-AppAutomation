@@ -1,0 +1,95 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fintrack-deployment
+  namespace: default
+  labels:
+    app: fintrack
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: fintrack
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: fintrack          
+      annotations:
+        prometheus.io/scrape: "true"  
+        prometheus.io/port: "5000"    
+        prometheus.io/path: "/metrics" 
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsNonRoot: true
+        fsGroup: 1000           
+      containers:
+        - name: fintrack
+          image: vamshi292/fintrack:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 5000
+              name: http
+          env:
+            - name: FLASK_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: fintrack-config   
+                  key: FLASK_ENV          
+
+            - name: GUNICORN_WORKERS
+              valueFrom:
+                configMapKeyRef:
+                  name: fintrack-config
+                  key: GUNICORN_WORKERS
+
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: fintrack-secret   
+                  key: SECRET_KEY         
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: fintrack-secret
+                  key: DATABASE_URL
+
+          resources:
+            requests:
+              cpu: "100m"       
+              memory: "128Mi"   
+            limits:
+              cpu: "500m"       
+              memory: "256Mi"   
+
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 20   
+            periodSeconds: 15         
+            failureThreshold: 3       
+            timeoutSeconds: 5         
+
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 10   
+            periodSeconds: 10         
+            failureThreshold: 3       
+            timeoutSeconds: 5
+
+          volumeMounts:
+            - name: fintrack-storage
+              mountPath: /app/instance
+
+      volumes:
+        - name: fintrack-storage
+          persistentVolumeClaim:
+            claimName: fintrack-pvc   
