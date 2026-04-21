@@ -3,6 +3,7 @@ version: "3.9"
 services: 
   fintrack_app:
     build: .
+    image: vamshi292/fintrack-main-fintrack_app:latest
     container_name: fintrack_app
     ports:
       - "5000:5000"

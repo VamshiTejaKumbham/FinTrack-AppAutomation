@@ -12,7 +12,7 @@ on:
 
 #Environment variables shared across all jobs
 env:
-  IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/fintrack-main-fintrack_app
+  IMAGE_NAME: vamshi292/fintrack-main-fintrack_app
 
 #Jobs
 jobs:
