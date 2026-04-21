@@ -31,7 +31,7 @@ spec:
       containers:
         - name: fintrack
           image: vamshi292/fintrack:latest
-          imagePullPolicy: Never
+          imagePullPolicy: Always
           ports:
             - containerPort: 5000
               name: http
