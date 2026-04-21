@@ -30,7 +30,7 @@ spec:
         fsGroup: 1000           
       containers:
         - name: fintrack
-          image: vamshi292/fintrack:latest
+          image: vamshi292/fintrack-main-fintrack_app:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
