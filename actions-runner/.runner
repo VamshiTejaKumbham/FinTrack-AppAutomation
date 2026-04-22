@@ -1,0 +1,11 @@
+﻿{
+  "agentId": 22,
+  "agentName": "FRIDAY",
+  "poolId": 1,
+  "poolName": "Default",
+  "serverUrl": "https://pipelinesghubeus21.actions.githubusercontent.com/iVKBXTZVa0iHf2LCOkhctHm0217DIdg15vNHGkjKessHm0HM7y/",
+  "gitHubUrl": "https://github.com/VamshiTejaKumbham/FinTrack-AppAutomation",
+  "workFolder": "_work",
+  "useV2Flow": true,
+  "serverUrlV2": "https://broker.actions.githubusercontent.com/"
+}

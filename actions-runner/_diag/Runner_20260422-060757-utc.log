@@ -1,0 +1,96 @@
+[2026-04-22 06:07:57Z INFO HostContext] No proxy settings were found based on environmental variables (http_proxy/https_proxy/HTTP_PROXY/HTTPS_PROXY)
+[2026-04-22 06:07:57Z INFO HostContext] Well known directory 'Bin': 'C:\Users\kumbh\LPU\Sem8\INT334\CA2\FinTrack-main\actions-runner\bin'
+[2026-04-22 06:07:57Z INFO HostContext] Well known directory 'Root': 'C:\Users\kumbh\LPU\Sem8\INT334\CA2\FinTrack-main\actions-runner'
+[2026-04-22 06:07:57Z INFO HostContext] Well known config file 'Credentials': 'C:\Users\kumbh\LPU\Sem8\INT334\CA2\FinTrack-main\actions-runner\.credentials'
+[2026-04-22 06:07:57Z INFO HostContext] Well known directory 'Bin': 'C:\Users\kumbh\LPU\Sem8\INT334\CA2\FinTrack-main\actions-runner\bin'
+[2026-04-22 06:07:57Z INFO HostContext] Well known directory 'Root': 'C:\Users\kumbh\LPU\Sem8\INT334\CA2\FinTrack-main\actions-runner'
+[2026-04-22 06:07:57Z INFO HostContext] Well known config file 'Runner': 'C:\Users\kumbh\LPU\Sem8\INT334\CA2\FinTrack-main\actions-runner\.runner'
+[2026-04-22 06:07:57Z INFO Listener] Runner is built for Windows (X64) - win-x64.
+[2026-04-22 06:07:57Z INFO Listener] RuntimeInformation: Microsoft Windows 10.0.26200.
+[2026-04-22 06:07:57Z INFO Listener] Version: 2.333.1
+[2026-04-22 06:07:57Z INFO Listener] Commit: 6792966801e8925346735b68c03bf9f347af4646
+[2026-04-22 06:07:57Z INFO Listener] Culture: en-IN
+[2026-04-22 06:07:57Z INFO Listener] UI Culture: en-US
+[2026-04-22 06:07:57Z INFO HostContext] Well known directory 'Bin': 'C:\Users\kumbh\LPU\Sem8\INT334\CA2\FinTrack-main\actions-runner\bin'
+[2026-04-22 06:07:57Z INFO HostContext] Well known directory 'Root': 'C:\Users\kumbh\LPU\Sem8\INT334\CA2\FinTrack-main\actions-runner'
+[2026-04-22 06:07:57Z INFO Listener] Validating directory permissions for: 'C:\Users\kumbh\LPU\Sem8\INT334\CA2\FinTrack-main\actions-runner'
+[2026-04-22 06:07:57Z INFO CommandLineParser] Parse
+[2026-04-22 06:07:57Z INFO CommandLineParser] Parsing 3 args
+[2026-04-22 06:07:57Z INFO CommandLineParser] parsing argument
+[2026-04-22 06:07:57Z INFO CommandLineParser] HasArgs: False
+[2026-04-22 06:07:57Z INFO CommandLineParser] Adding Command: remove
+[2026-04-22 06:07:57Z INFO CommandLineParser] parsing argument
+[2026-04-22 06:07:57Z INFO CommandLineParser] HasArgs: True
+[2026-04-22 06:07:57Z INFO CommandLineParser] arg: token
+[2026-04-22 06:07:57Z INFO CommandLineParser] parsing argument
+[2026-04-22 06:07:57Z INFO CommandLineParser] HasArgs: True
+[2026-04-22 06:07:57Z INFO CommandLineParser] Adding option 'token': '***'
+[2026-04-22 06:07:57Z INFO Listener] Arguments parsed
+[2026-04-22 06:07:57Z INFO Runner] ExecuteCommand
+[2026-04-22 06:07:57Z INFO ConfigurationStore] currentAssemblyLocation: C:\Users\kumbh\LPU\Sem8\INT334\CA2\FinTrack-main\actions-runner\bin\Runner.Listener.dll
+[2026-04-22 06:07:57Z INFO HostContext] Well known directory 'Bin': 'C:\Users\kumbh\LPU\Sem8\INT334\CA2\FinTrack-main\actions-runner\bin'
+[2026-04-22 06:07:57Z INFO ConfigurationStore] binPath: C:\Users\kumbh\LPU\Sem8\INT334\CA2\FinTrack-main\actions-runner\bin
+[2026-04-22 06:07:57Z INFO HostContext] Well known directory 'Bin': 'C:\Users\kumbh\LPU\Sem8\INT334\CA2\FinTrack-main\actions-runner\bin'
+[2026-04-22 06:07:57Z INFO HostContext] Well known directory 'Root': 'C:\Users\kumbh\LPU\Sem8\INT334\CA2\FinTrack-main\actions-runner'
+[2026-04-22 06:07:57Z INFO ConfigurationStore] RootFolder: C:\Users\kumbh\LPU\Sem8\INT334\CA2\FinTrack-main\actions-runner
+[2026-04-22 06:07:57Z INFO HostContext] Well known directory 'Bin': 'C:\Users\kumbh\LPU\Sem8\INT334\CA2\FinTrack-main\actions-runner\bin'
+[2026-04-22 06:07:57Z INFO HostContext] Well known directory 'Root': 'C:\Users\kumbh\LPU\Sem8\INT334\CA2\FinTrack-main\actions-runner'
+[2026-04-22 06:07:57Z INFO HostContext] Well known config file 'Runner': 'C:\Users\kumbh\LPU\Sem8\INT334\CA2\FinTrack-main\actions-runner\.runner'
+[2026-04-22 06:07:57Z INFO ConfigurationStore] ConfigFilePath: C:\Users\kumbh\LPU\Sem8\INT334\CA2\FinTrack-main\actions-runner\.runner
+[2026-04-22 06:07:57Z INFO HostContext] Well known directory 'Bin': 'C:\Users\kumbh\LPU\Sem8\INT334\CA2\FinTrack-main\actions-runner\bin'
+[2026-04-22 06:07:57Z INFO HostContext] Well known directory 'Root': 'C:\Users\kumbh\LPU\Sem8\INT334\CA2\FinTrack-main\actions-runner'
+[2026-04-22 06:07:57Z INFO HostContext] Well known config file 'MigratedRunner': 'C:\Users\kumbh\LPU\Sem8\INT334\CA2\FinTrack-main\actions-runner\.runner_migrated'
+[2026-04-22 06:07:57Z INFO ConfigurationStore] MigratedConfigFilePath: C:\Users\kumbh\LPU\Sem8\INT334\CA2\FinTrack-main\actions-runner\.runner_migrated
+[2026-04-22 06:07:57Z INFO HostContext] Well known directory 'Bin': 'C:\Users\kumbh\LPU\Sem8\INT334\CA2\FinTrack-main\actions-runner\bin'
+[2026-04-22 06:07:57Z INFO HostContext] Well known directory 'Root': 'C:\Users\kumbh\LPU\Sem8\INT334\CA2\FinTrack-main\actions-runner'
+[2026-04-22 06:07:57Z INFO HostContext] Well known config file 'Credentials': 'C:\Users\kumbh\LPU\Sem8\INT334\CA2\FinTrack-main\actions-runner\.credentials'
+[2026-04-22 06:07:57Z INFO ConfigurationStore] CredFilePath: C:\Users\kumbh\LPU\Sem8\INT334\CA2\FinTrack-main\actions-runner\.credentials
+[2026-04-22 06:07:57Z INFO HostContext] Well known directory 'Bin': 'C:\Users\kumbh\LPU\Sem8\INT334\CA2\FinTrack-main\actions-runner\bin'
+[2026-04-22 06:07:57Z INFO HostContext] Well known directory 'Root': 'C:\Users\kumbh\LPU\Sem8\INT334\CA2\FinTrack-main\actions-runner'
+[2026-04-22 06:07:57Z INFO HostContext] Well known config file 'MigratedCredentials': 'C:\Users\kumbh\LPU\Sem8\INT334\CA2\FinTrack-main\actions-runner\.credentials_migrated'
+[2026-04-22 06:07:57Z INFO ConfigurationStore] MigratedCredFilePath: C:\Users\kumbh\LPU\Sem8\INT334\CA2\FinTrack-main\actions-runner\.credentials_migrated
+[2026-04-22 06:07:57Z INFO HostContext] Well known directory 'Bin': 'C:\Users\kumbh\LPU\Sem8\INT334\CA2\FinTrack-main\actions-runner\bin'
+[2026-04-22 06:07:57Z INFO HostContext] Well known directory 'Root': 'C:\Users\kumbh\LPU\Sem8\INT334\CA2\FinTrack-main\actions-runner'
+[2026-04-22 06:07:57Z INFO HostContext] Well known config file 'Service': 'C:\Users\kumbh\LPU\Sem8\INT334\CA2\FinTrack-main\actions-runner\.service'
+[2026-04-22 06:07:57Z INFO ConfigurationStore] ServiceConfigFilePath: C:\Users\kumbh\LPU\Sem8\INT334\CA2\FinTrack-main\actions-runner\.service
+[2026-04-22 06:07:57Z INFO CommandSettings] Flag 'help': 'False'
+[2026-04-22 06:07:57Z INFO CommandSettings] Flag 'version': 'False'
+[2026-04-22 06:07:57Z INFO CommandSettings] Flag 'commit': 'False'
+[2026-04-22 06:07:57Z INFO CommandSettings] Flag 'check': 'False'
+[2026-04-22 06:07:57Z INFO CommandSettings] Command 'configure': 'False'
+[2026-04-22 06:07:57Z INFO CommandSettings] Command 'remove': 'True'
+[2026-04-22 06:07:57Z INFO CommandSettings] Flag 'local': 'False'
+[2026-04-22 06:07:57Z INFO ConfigurationStore] IsServiceConfigured()
+[2026-04-22 06:07:57Z INFO ConfigurationStore] IsServiceConfigured: False
+[2026-04-22 06:07:57Z INFO ConfigurationStore] IsConfigured()
+[2026-04-22 06:07:57Z INFO ConfigurationStore] IsConfigured: True
+[2026-04-22 06:07:57Z INFO ConfigurationStore] HasCredentials()
+[2026-04-22 06:07:57Z INFO ConfigurationStore] stored True
+[2026-04-22 06:07:57Z INFO ConfigurationStore] Read setting file: 411 chars
+[2026-04-22 06:07:57Z INFO CommandSettings] Arg 'token': '***'
+[2026-04-22 06:07:57Z INFO CommandSettings] Remove token from Arg dictionary.
+[2026-04-22 06:07:57Z INFO ConfigurationManager] Http response code: OK from 'POST https://api.github.com/actions/runner-registration' (DFF0:0C13:37262E:4052A4:69E865BD)
+[2026-04-22 06:07:57Z INFO ConfigurationManager] cred retrieved via GitHub auth
+[2026-04-22 06:07:57Z INFO RunnerServer] EstablishVssConnection
+[2026-04-22 06:07:57Z INFO RunnerServer] Establish connection with 100 seconds timeout.
+[2026-04-22 06:07:57Z INFO GitHubActionsService] Starting operation Location.GetConnectionData
+[2026-04-22 06:07:57Z INFO RunnerServer] EstablishVssConnection
+[2026-04-22 06:07:57Z INFO RunnerServer] Establish connection with 60 seconds timeout.
+[2026-04-22 06:07:57Z INFO GitHubActionsService] Starting operation Location.GetConnectionData
+[2026-04-22 06:07:57Z INFO RunnerServer] EstablishVssConnection
+[2026-04-22 06:07:57Z INFO RunnerServer] Establish connection with 60 seconds timeout.
+[2026-04-22 06:07:57Z INFO GitHubActionsService] Starting operation Location.GetConnectionData
+[2026-04-22 06:07:59Z INFO GitHubActionsService] Finished operation Location.GetConnectionData
+[2026-04-22 06:07:59Z INFO GitHubActionsService] Finished operation Location.GetConnectionData
+[2026-04-22 06:07:59Z INFO GitHubActionsService] Finished operation Location.GetConnectionData
+[2026-04-22 06:07:59Z INFO Terminal] WRITE LINE: 
+[2026-04-22 06:07:59Z INFO ConfigurationStore] IsConfigured()
+[2026-04-22 06:07:59Z INFO ConfigurationStore] IsConfigured: True
+[2026-04-22 06:07:59Z INFO ConfigurationStore] HasCredentials()
+[2026-04-22 06:07:59Z INFO ConfigurationStore] stored True
+[2026-04-22 06:07:59Z INFO HostContext] Well known directory 'Bin': 'C:\Users\kumbh\LPU\Sem8\INT334\CA2\FinTrack-main\actions-runner\bin'
+[2026-04-22 06:07:59Z INFO HostContext] Well known directory 'Root': 'C:\Users\kumbh\LPU\Sem8\INT334\CA2\FinTrack-main\actions-runner'
+[2026-04-22 06:07:59Z INFO HostContext] Well known config file 'RSACredentials': 'C:\Users\kumbh\LPU\Sem8\INT334\CA2\FinTrack-main\actions-runner\.credentials_rsaparams'
+[2026-04-22 06:07:59Z INFO RSAEncryptedFileKeyManager] Deleting RSA key parameters file C:\Users\kumbh\LPU\Sem8\INT334\CA2\FinTrack-main\actions-runner\.credentials_rsaparams
+[2026-04-22 06:07:59Z INFO Terminal] WRITE LINE: 
+[2026-04-22 06:07:59Z INFO Listener] Runner execution has finished with return code 0
