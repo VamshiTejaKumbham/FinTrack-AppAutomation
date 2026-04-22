@@ -14,7 +14,7 @@ from prometheus_client import Counter, Histogram, Gauge
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your-secret-key-change-in-production'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////app/instance/expense_tracker.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///expense_tracker.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 metrics = PrometheusMetrics(app, group_by='url_rule')
