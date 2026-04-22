@@ -139,15 +139,11 @@ jobs:
 
       - name: Roll out new image
         run: |
-          kubectl set image deployment/fintrack-deployment \
-            fintrack=${{ env.IMAGE_NAME }}:${{ needs.build.outputs.image_tag }} \
-            --namespace=default
+          kubectl set image deployment/fintrack-deployment fintrack=${{ env.IMAGE_NAME }}:${{ needs.build.outputs.image_tag }} --namespace=default
 
       - name: Wait for rollout to complete
         run: |
-          kubectl rollout status deployment/fintrack-deployment \
-            --namespace=default \
-            --timeout=120s
+          kubectl rollout status deployment/fintrack-deployment --namespace=default --timeout=120s
  
       - name: Show running pods
         run: kubectl get pods -l app=fintrack -n default -o wide
