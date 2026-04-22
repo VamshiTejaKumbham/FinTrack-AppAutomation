@@ -194,7 +194,7 @@
       "gridPos": { "x": 6, "y": 24, "w": 6, "h": 6 },
       "targets": [
         {
-          "expr": "sum(max(fintrack_expenses_created_total) by (category))",
+          "expr": "max(fintrack_expenses_created_total)",
           "legendFormat": "Total",
           "refId": "A",
           "instant": true
