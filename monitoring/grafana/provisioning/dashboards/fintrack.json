@@ -11,7 +11,7 @@
     {
       "id": 1,
       "title": "HTTP Request Rate (req/sec)",
-      "description": "Uses flask_http_request_duration_seconds_count — the real metric name from prometheus_flask_exporter.",
+      "description": "Requests per second across all routes, grouped by HTTP method. Uses flask_http_request_duration_seconds_count — the real metric name from prometheus_flask_exporter.",
       "type": "timeseries",
       "gridPos": { "x": 0, "y": 0, "w": 12, "h": 8 },
       "targets": [
@@ -25,20 +25,26 @@
         "defaults": {
           "unit": "reqps",
           "color": { "mode": "palette-classic" },
-          "custom": { "lineWidth": 2 }
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 8
+          }
         }
       },
-      "options": { "tooltip": { "mode": "multi" } }
+      "options": {
+        "tooltip": { "mode": "multi" }
+      }
     },
+
     {
       "id": 2,
       "title": "HTTP Error Rate (%)",
-      "description": "Percentage of 5xx responses.",
+      "description": "Percentage of 5xx responses over total requests. Shows 0% when there is no traffic (division-by-zero guarded with 'or vector(0)').",
       "type": "timeseries",
       "gridPos": { "x": 12, "y": 0, "w": 12, "h": 8 },
       "targets": [
         {
-          "expr": "100 * sum(rate(flask_http_request_duration_seconds_count{status=~\"5..\"}[5m])) / sum(rate(flask_http_request_duration_seconds_count[5m]))",
+          "expr": "100 * sum(rate(flask_http_request_duration_seconds_count{status=~\"5..\"}[5m])) / sum(rate(flask_http_request_duration_seconds_count[5m])) or vector(0)",
           "legendFormat": "Error %",
           "refId": "A"
         }
@@ -54,46 +60,57 @@
               { "value": 5, "color": "red" }
             ]
           },
-          "custom": { "lineWidth": 2 }
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 8
+          }
         }
       }
     },
+
     {
       "id": 3,
       "title": "Response Latency — p50 / p95 / p99",
-      "description": "Percentile latencies from flask_http_request_duration_seconds histogram.",
+      "description": "Percentile latencies from the flask_http_request_duration_seconds histogram. The 'le' label is included in the by() clause to ensure correct quantile calculation across multiple pods.",
       "type": "timeseries",
       "gridPos": { "x": 0, "y": 8, "w": 12, "h": 8 },
       "targets": [
         {
-          "expr": "histogram_quantile(0.50, rate(flask_http_request_duration_seconds_bucket[5m]))",
+          "expr": "histogram_quantile(0.50, sum(rate(flask_http_request_duration_seconds_bucket[5m])) by (le))",
           "legendFormat": "p50",
           "refId": "A"
         },
         {
-          "expr": "histogram_quantile(0.95, rate(flask_http_request_duration_seconds_bucket[5m]))",
+          "expr": "histogram_quantile(0.95, sum(rate(flask_http_request_duration_seconds_bucket[5m])) by (le))",
           "legendFormat": "p95",
           "refId": "B"
         },
         {
-          "expr": "histogram_quantile(0.99, rate(flask_http_request_duration_seconds_bucket[5m]))",
+          "expr": "histogram_quantile(0.99, sum(rate(flask_http_request_duration_seconds_bucket[5m])) by (le))",
           "legendFormat": "p99",
           "refId": "C"
         }
       ],
       "fieldConfig": {
-        "defaults": { "unit": "s", "custom": { "lineWidth": 2 } }
+        "defaults": {
+          "unit": "s",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 5
+          }
+        }
       }
     },
+
     {
       "id": 4,
       "title": "DB Query Duration (p95)",
-      "description": "95th percentile of fintrack_db_query_duration_seconds histogram.",
+      "description": "95th percentile of the custom fintrack_db_query_duration_seconds histogram. The 'le' label is included in by() for correct multi-pod aggregation.",
       "type": "timeseries",
       "gridPos": { "x": 12, "y": 8, "w": 12, "h": 8 },
       "targets": [
         {
-          "expr": "histogram_quantile(0.95, rate(fintrack_db_query_duration_seconds_bucket[5m]))",
+          "expr": "histogram_quantile(0.95, sum(rate(fintrack_db_query_duration_seconds_bucket[5m])) by (le))",
           "legendFormat": "p95 DB latency",
           "refId": "A"
         }
@@ -109,14 +126,18 @@
               { "value": 0.5, "color": "red" }
             ]
           },
-          "custom": { "lineWidth": 2 }
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 8
+          }
         }
       }
     },
+
     {
       "id": 5,
       "title": "Expenses Created (by category)",
-      "description": "Our custom counter fintrack_expenses_created_total, labelled by category.",
+      "description": "Cumulative value of fintrack_expenses_created_total counter, labelled by category. The line rises each time an expense is added in that category.",
       "type": "timeseries",
       "gridPos": { "x": 0, "y": 16, "w": 12, "h": 8 },
       "targets": [
@@ -130,14 +151,18 @@
         "defaults": {
           "unit": "short",
           "color": { "mode": "palette-classic" },
-          "custom": { "lineWidth": 2 }
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 5
+          }
         }
       }
     },
+
     {
       "id": 6,
       "title": "Login Events",
-      "description": "Successful vs failed logins per 5 minute window.",
+      "description": "Successful vs failed logins per 5-minute window using increase(). Unit is 'none' to avoid decimal fractions on whole-number event counts.",
       "type": "timeseries",
       "gridPos": { "x": 12, "y": 16, "w": 12, "h": 8 },
       "targets": [
@@ -153,18 +178,25 @@
         }
       ],
       "fieldConfig": {
-        "defaults": { "unit": "short", "custom": { "lineWidth": 2 } }
+        "defaults": {
+          "unit": "none",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 8
+          }
+        }
       }
     },
+
     {
       "id": 7,
       "title": "Registered Users",
-      "description": "fintrack_registered_users_total gauge — updated on every dashboard page load.",
+      "description": "Current value of fintrack_registered_users_total gauge. max() aggregates across pods so two pods emitting the same count don't show duplicates.",
       "type": "stat",
       "gridPos": { "x": 0, "y": 24, "w": 6, "h": 6 },
       "targets": [
         {
-          "expr": "fintrack_registered_users_total",
+          "expr": "max(fintrack_registered_users_total)",
           "legendFormat": "Users",
           "refId": "A",
           "instant": true
@@ -186,15 +218,16 @@
         "graphMode": "none"
       }
     },
+
     {
       "id": 8,
       "title": "Total Expenses Created",
-      "description": "Sum of fintrack_expenses_created_total across all categories.",
+      "description": "Total expenses across all categories. sum(max(...) by (category)) takes the max per category across pods to avoid double-counting, then sums all categories into one number.",
       "type": "stat",
       "gridPos": { "x": 6, "y": 24, "w": 6, "h": 6 },
       "targets": [
         {
-          "expr": "fintrack_expenses_created_total",
+          "expr": "sum(max(fintrack_expenses_created_total) by (category))",
           "legendFormat": "Total",
           "refId": "A",
           "instant": true
@@ -216,15 +249,16 @@
         "graphMode": "none"
       }
     },
+
     {
       "id": 9,
       "title": "CSV Exports",
-      "description": "fintrack_csv_exports_total counter — increments on every CSV download.",
+      "description": "Total CSV downloads. max() across pods prevents double-counting when multiple pods are running.",
       "type": "stat",
       "gridPos": { "x": 12, "y": 24, "w": 6, "h": 6 },
       "targets": [
         {
-          "expr": "fintrack_csv_exports_total",
+          "expr": "max(fintrack_csv_exports_total)",
           "legendFormat": "Exports",
           "refId": "A",
           "instant": true
@@ -246,15 +280,16 @@
         "graphMode": "none"
       }
     },
+
     {
       "id": 10,
       "title": "App Uptime",
-      "description": "1 = Prometheus can reach /metrics. 0 = app is unreachable.",
+      "description": "min(up{job='fintrack'}) — if ANY pod is down this shows 0/DOWN. Returns 1/UP only when all pods are healthy.",
       "type": "stat",
       "gridPos": { "x": 18, "y": 24, "w": 6, "h": 6 },
       "targets": [
         {
-          "expr": "up{job=\"fintrack\"}",
+          "expr": "min(up{job=\"fintrack\"})",
           "legendFormat": "Status",
           "refId": "A",
           "instant": true
@@ -273,7 +308,10 @@
           "mappings": [
             {
               "type": "value",
-              "options": { "0": { "text": "DOWN" }, "1": { "text": "UP" } }
+              "options": {
+                "0": { "text": "DOWN" },
+                "1": { "text": "UP" }
+              }
             }
           ]
         }
@@ -286,5 +324,5 @@
     }
   ],
   "schemaVersion": 38,
-  "version": 2
+  "version": 3
 }
