@@ -3,93 +3,124 @@
 {% block title %}Analytics - FinTrack{% endblock %}
 
 {% block content %}
-<h2 class="mb-8">Analytics</h2>
 
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-    <!-- Monthly Spending Trend -->
-    <div class="lg:col-span-2">
-        <div class="card">
-            <div class="card-header">
-                <h5>Monthly Spending Trend</h5>
-            </div>
-            <div class="overflow-x-auto">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Month</th>
-                            <th>Total Spent</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for data in monthly_data %}
-                        <tr>
-                            <td class="text-slate-300">{{ data.month }} {{ data.year }}</td>
-                            <td class="font-semibold text-indigo-300">₹{{ "%.2f"|format(data.total) }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+<!-- Header -->
+<div class="mb-8">
+    <h1 class="font-display font-700 text-2xl text-white tracking-tight">Analytics</h1>
+    <p class="text-slate-500 text-sm mt-0.5">Understand your spending patterns over time</p>
+</div>
+
+<!-- Quick Stats Strip -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+    <div class="rounded-xl border border-slate-800 bg-slate-900/60 p-4 card-hover">
+        <div class="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-1.5">This Month</div>
+        <div class="font-display font-700 text-xl text-indigo-400">
+            ₹{{ "%.2f"|format(monthly_data[-1].total if monthly_data else 0) }}
         </div>
     </div>
-    
-    <!-- Category Totals -->
-    <div>
-        <div class="card">
-            <div class="card-header">
-                <h5>Category Totals</h5>
-            </div>
-            <div class="card-body space-y-4">
-                {% if category_totals %}
-                {% set total_amount = category_totals | sum(attribute=1) %}
-                {% for category, amount in category_totals %}
-                <div>
-                    <div class="flex justify-between items-center mb-2">
-                        <span class="font-medium text-slate-300">{{ category }}</span>
-                        <span class="font-bold text-indigo-300">₹{{ "%.2f"|format(amount) }}</span>
-                    </div>
-                    <div class="progress">
-                        <div class="progress-bar" role="progressbar" 
-                             style="width: {{ (amount / total_amount * 100) if total_amount > 0 else 0 }}%">
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-                <div class="text-center pt-4 border-t border-slate-700 mt-4">
-                    <p class="font-bold text-indigo-300">Total: ₹{{ "%.2f"|format(total_amount) }}</p>
-                </div>
-                {% else %}
-                <p class="text-center text-slate-400">No expenses logged yet</p>
-                {% endif %}
-            </div>
+    <div class="rounded-xl border border-slate-800 bg-slate-900/60 p-4 card-hover">
+        <div class="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-1.5">Monthly Avg</div>
+        <div class="font-display font-700 text-xl text-violet-400">
+            ₹{{ "%.2f"|format((monthly_data | sum(attribute='total')) / 12 if monthly_data else 0) }}
+        </div>
+    </div>
+    <div class="rounded-xl border border-slate-800 bg-slate-900/60 p-4 card-hover">
+        <div class="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-1.5">Categories</div>
+        <div class="font-display font-700 text-xl text-emerald-400">
+            {{ category_totals | length }}
+        </div>
+    </div>
+    <div class="rounded-xl border border-slate-800 bg-slate-900/60 p-4 card-hover">
+        <div class="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-1.5">Total Spent</div>
+        <div class="font-display font-700 text-xl text-rose-400">
+            ₹{{ "%.2f"|format(category_totals | sum(attribute=1) if category_totals else 0) }}
         </div>
     </div>
 </div>
 
-<!-- Quick Stats -->
-<div class="card">
-    <div class="card-header">
-        <h5>Quick Stats</h5>
-    </div>
-    <div class="card-body">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-            <div>
-                <h3 class="text-2xl font-bold text-indigo-300 mb-1">₹{{ "%.2f"|format(monthly_data[-1].total if monthly_data else 0) }}</h3>
-                <p class="text-slate-400 text-sm m-0">This Month</p>
-            </div>
-            <div>
-                <h3 class="text-2xl font-bold text-indigo-300 mb-1">₹{{ "%.2f"|format((monthly_data | sum(attribute='total')) / 12 if monthly_data else 0) }}</h3>
-                <p class="text-slate-400 text-sm m-0">Monthly Avg</p>
-            </div>
-            <div>
-                <h3 class="text-2xl font-bold text-emerald-400 mb-1">{{ category_totals | length }}</h3>
-                <p class="text-slate-400 text-sm m-0">Categories</p>
-            </div>
-            <div>
-                <h3 class="text-2xl font-bold text-indigo-300 mb-1">₹{{ "%.2f"|format(category_totals | sum(attribute=1) if category_totals else 0) }}</h3>
-                <p class="text-slate-400 text-sm m-0">Total Spent</p>
-            </div>
+<!-- Main Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+
+    <!-- Monthly Trend Table (2/3) -->
+    <div class="lg:col-span-2 rounded-xl border border-slate-800 bg-slate-900/60 overflow-hidden">
+        <div class="px-5 py-4 border-b border-slate-800/80">
+            <h2 class="font-display font-700 text-white text-sm">Monthly Spending Trend</h2>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead>
+                    <tr class="border-b border-slate-800/60">
+                        <th class="text-left text-xs font-semibold text-slate-500 uppercase tracking-wider px-5 py-3">Month</th>
+                        <th class="text-right text-xs font-semibold text-slate-500 uppercase tracking-wider px-5 py-3">Total Spent</th>
+                        <th class="text-right text-xs font-semibold text-slate-500 uppercase tracking-wider px-5 py-3 hidden sm:table-cell">Share</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800/40">
+                    {% set grand_total = monthly_data | sum(attribute='total') if monthly_data else 0 %}
+                    {% for data in monthly_data %}
+                    <tr class="hover:bg-slate-800/30 transition-colors">
+                        <td class="px-5 py-3.5 text-sm text-slate-300 font-medium">{{ data.month }} {{ data.year }}</td>
+                        <td class="px-5 py-3.5 text-right font-display font-600 text-sm text-indigo-400 whitespace-nowrap">
+                            ₹{{ "%.2f"|format(data.total) }}
+                        </td>
+                        <td class="px-5 py-3.5 hidden sm:table-cell">
+                            <div class="flex items-center justify-end gap-2">
+                                <div class="w-20 h-1.5 rounded-full bg-slate-800 overflow-hidden">
+                                    <div class="h-full rounded-full progress-bar-inner"
+                                         style="width: {{ (data.total / grand_total * 100) if grand_total > 0 else 0 }}%">
+                                    </div>
+                                </div>
+                                <span class="text-xs text-slate-500 w-8 text-right">
+                                    {{ "%.0f"|format((data.total / grand_total * 100) if grand_total > 0 else 0) }}%
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
+
+    <!-- Category Totals (1/3) -->
+    <div class="rounded-xl border border-slate-800 bg-slate-900/60 overflow-hidden">
+        <div class="px-5 py-4 border-b border-slate-800/80 flex items-center justify-between">
+            <h2 class="font-display font-700 text-white text-sm">Category Totals</h2>
+        </div>
+        <div class="p-5">
+            {% if category_totals %}
+                {% set total_amount = category_totals | sum(attribute=1) %}
+                <div class="space-y-4">
+                {% for category, amount in category_totals %}
+                <div>
+                    <div class="flex items-center justify-between mb-1.5">
+                        <span class="text-sm text-slate-300 font-medium">{{ category }}</span>
+                        <span class="text-xs font-display font-600 text-indigo-400 whitespace-nowrap">₹{{ "%.2f"|format(amount) }}</span>
+                    </div>
+                    <div class="h-1.5 rounded-full bg-slate-800 overflow-hidden">
+                        <div class="h-full rounded-full progress-bar-inner"
+                             style="width: {{ (amount / total_amount * 100) if total_amount > 0 else 0 }}%">
+                        </div>
+                    </div>
+                    <div class="text-right text-xs text-slate-600 mt-0.5">
+                        {{ "%.1f"|format((amount / total_amount * 100) if total_amount > 0 else 0) }}%
+                    </div>
+                </div>
+                {% endfor %}
+                </div>
+                <!-- Divider + Total -->
+                <div class="mt-5 pt-4 border-t border-slate-800 flex items-center justify-between">
+                    <span class="text-xs text-slate-500 font-semibold uppercase tracking-wide">Total</span>
+                    <span class="font-display font-700 text-white text-sm">₹{{ "%.2f"|format(total_amount) }}</span>
+                </div>
+            {% else %}
+            <div class="flex flex-col items-center justify-center py-10 text-center">
+                <i class="fas fa-chart-pie text-slate-700 text-2xl mb-3"></i>
+                <p class="text-slate-600 text-sm">No expenses logged yet</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
 </div>
 {% endblock %}

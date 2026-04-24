@@ -1,44 +1,84 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="min-h-[calc(100vh-4rem)] flex flex-col justify-center">
-    <!-- Hero Section -->
-    <div class="text-center mb-16">
-        <h1 class="text-5xl font-bold mb-4 bg-gradient-to-r from-indigo-400 via-indigo-300 to-emerald-400 bg-clip-text text-transparent">
-            FinTrack
+<div class="min-h-[80vh] flex flex-col items-center justify-center">
+
+    <!-- Hero -->
+    <div class="text-center max-w-2xl mx-auto px-4 mb-20">
+        <!-- Logo badge -->
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/10 text-indigo-400 text-xs font-medium mb-8 tracking-wide uppercase">
+            <span class="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse"></span>
+            Personal Finance Tracker
+        </div>
+
+        <h1 class="font-display font-800 text-5xl sm:text-6xl md:text-7xl text-white leading-none tracking-tight mb-6">
+            Fin<span class="text-indigo-400">Track</span>
         </h1>
-        <p class="text-xl text-slate-300 mb-8 max-w-2xl mx-auto">
-            Simple, elegant expense tracking for mindful financial management
+
+        <p class="text-slate-400 text-lg sm:text-xl leading-relaxed mb-10 max-w-lg mx-auto">
+            Effortlessly track every rupee. Understand your spending patterns. Take control of your finances.
         </p>
-    </div>
 
-    <!-- Features Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-        <div class="stat-card border-b-2 border-indigo-500/30">
-            <i class="fas fa-plus-circle text-indigo-400"></i>
-            <h5 class="font-bold text-lg mt-4 mb-2">Track Easily</h5>
-            <p class="text-slate-400">Add, edit, and categorize your expenses with ease</p>
-        </div>
-        <div class="stat-card border-b-2 border-emerald-500/30">
-            <i class="fas fa-chart-line text-emerald-400"></i>
-            <h5 class="font-bold text-lg mt-4 mb-2">Analyze Spending</h5>
-            <p class="text-slate-400">View detailed analytics and spending patterns</p>
-        </div>
-        <div class="stat-card border-b-2 border-indigo-500/30">
-            <i class="fas fa-download text-indigo-400"></i>
-            <h5 class="font-bold text-lg mt-4 mb-2">Export Data</h5>
-            <p class="text-slate-400">Download your data as CSV anytime</p>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a href="{{ url_for('register') }}"
+               class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm transition-all duration-150 shadow-glow hover:shadow-lg">
+                <i class="fas fa-rocket text-xs"></i>
+                Get Started Free
+            </a>
+            <a href="{{ url_for('login') }}"
+               class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg border border-slate-700 hover:border-slate-500 text-slate-300 hover:text-white font-semibold text-sm transition-all duration-150 bg-slate-900 hover:bg-slate-800">
+                Sign In
+                <i class="fas fa-arrow-right text-xs opacity-60"></i>
+            </a>
         </div>
     </div>
 
-    <!-- CTA Buttons -->
-    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-        <a href="{{ url_for('register') }}" class="btn btn-primary px-8 py-3 text-lg">
-            <i class="fas fa-rocket"></i> Get Started
-        </a>
-        <a href="{{ url_for('login') }}" class="btn btn-secondary px-8 py-3 text-lg">
-            <i class="fas fa-sign-in-alt"></i> Sign In
-        </a>
+    <!-- Feature Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 w-full max-w-4xl px-4">
+
+        <div class="card-hover group p-6 rounded-xl border border-slate-800 bg-slate-900/60 backdrop-blur-sm">
+            <div class="w-10 h-10 rounded-lg bg-indigo-500/15 border border-indigo-500/25 flex items-center justify-center mb-4 group-hover:bg-indigo-500/25 transition-colors">
+                <i class="fas fa-plus text-indigo-400 text-sm"></i>
+            </div>
+            <h3 class="font-display font-700 text-white text-base mb-2">Track Easily</h3>
+            <p class="text-slate-400 text-sm leading-relaxed">Add, edit, and categorize your expenses with a clean, distraction-free interface.</p>
+        </div>
+
+        <div class="card-hover group p-6 rounded-xl border border-slate-800 bg-slate-900/60 backdrop-blur-sm">
+            <div class="w-10 h-10 rounded-lg bg-emerald-500/15 border border-emerald-500/25 flex items-center justify-center mb-4 group-hover:bg-emerald-500/25 transition-colors">
+                <i class="fas fa-chart-line text-emerald-400 text-sm"></i>
+            </div>
+            <h3 class="font-display font-700 text-white text-base mb-2">Analyze Spending</h3>
+            <p class="text-slate-400 text-sm leading-relaxed">Visualize trends, category breakdowns, and monthly averages at a glance.</p>
+        </div>
+
+        <div class="card-hover group p-6 rounded-xl border border-slate-800 bg-slate-900/60 backdrop-blur-sm">
+            <div class="w-10 h-10 rounded-lg bg-violet-500/15 border border-violet-500/25 flex items-center justify-center mb-4 group-hover:bg-violet-500/25 transition-colors">
+                <i class="fas fa-download text-violet-400 text-sm"></i>
+            </div>
+            <h3 class="font-display font-700 text-white text-base mb-2">Export Data</h3>
+            <p class="text-slate-400 text-sm leading-relaxed">Download your complete expense history as CSV anytime, no friction.</p>
+        </div>
+
     </div>
+
+    <!-- Subtle bottom stat strip -->
+    <div class="mt-16 flex flex-col sm:flex-row items-center gap-8 text-center">
+        <div>
+            <div class="font-display font-800 text-2xl text-white">₹0</div>
+            <div class="text-xs text-slate-600 mt-0.5">Cost to start</div>
+        </div>
+        <div class="hidden sm:block w-px h-8 bg-slate-800"></div>
+        <div>
+            <div class="font-display font-800 text-2xl text-white">9</div>
+            <div class="text-xs text-slate-600 mt-0.5">Categories</div>
+        </div>
+        <div class="hidden sm:block w-px h-8 bg-slate-800"></div>
+        <div>
+            <div class="font-display font-800 text-2xl text-white">CSV</div>
+            <div class="text-xs text-slate-600 mt-0.5">Export format</div>
+        </div>
+    </div>
+
 </div>
 {% endblock %}

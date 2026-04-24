@@ -1,255 +1,200 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Expense Tracker{% endblock %}</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>{% block title %}FinTrack{% endblock %}</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        display: ['Syne', 'sans-serif'],
+                        body: ['DM Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        slate: {
+                            850: '#162032',
+                            950: '#0a0f1a',
+                        }
+                    },
+                    boxShadow: {
+                        'glow': '0 0 20px rgba(99,102,241,0.15)',
+                        'glow-emerald': '0 0 20px rgba(16,185,129,0.15)',
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        * {
-            @apply transition-colors duration-200;
+        body { font-family: 'DM Sans', sans-serif; }
+        h1, h2, h3, h4, h5, h6, .font-display { font-family: 'Syne', sans-serif; }
+        .nav-link-active {
+            color: #818cf8 !important;
+            background-color: rgba(99, 102, 241, 0.1);
+            border-radius: 6px;
         }
-        
-        body {
-            @apply bg-slate-950 text-slate-100 antialiased;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        .progress-bar-inner {
+            background: linear-gradient(90deg, #6366f1, #8b5cf6);
+            transition: width 0.6s ease;
         }
-        
-        /* Navbar */
-        nav {
-            @apply border-b border-slate-800 bg-slate-900/50 backdrop-blur-sm sticky top-0 z-50;
+        .card-hover {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
-        
-        .navbar-brand {
-            @apply text-xl font-bold text-indigo-400 flex items-center gap-2;
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
         }
-        
-        .nav-link {
-            @apply text-slate-300 font-medium text-sm hover:text-indigo-400 px-3 py-2 rounded-lg transition-colors;
+        /* Subtle grid background */
+        .bg-grid {
+            background-image: linear-gradient(rgba(99,102,241,0.03) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(99,102,241,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
         }
-        
-        .nav-link.active {
-            @apply text-indigo-400 bg-indigo-400/10;
-        }
-        
-        /* Cards */
-        .card {
-            @apply bg-slate-800/50 border border-slate-700 rounded-xl shadow-lg hover:shadow-xl transition-shadow overflow-hidden;
-        }
-        
-        .card-header {
-            @apply px-6 py-4 border-b border-slate-700 bg-slate-800/30;
-        }
-        
-        .card-header h5 {
-            @apply text-lg font-bold text-slate-100 m-0;
-        }
-        
-        .card-body {
-            @apply p-6;
-        }
-        
-        /* Buttons */
-        .btn {
-            @apply inline-flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-200;
-        }
-        
-        .btn-primary {
-            @apply bg-indigo-600 text-white hover:bg-indigo-500 active:scale-95 shadow-lg hover:shadow-indigo-500/30;
-        }
-        
-        .btn-secondary {
-            @apply bg-slate-700 text-slate-200 hover:bg-slate-600 active:scale-95;
-        }
-        
-        .btn-sm {
-            @apply px-3 py-1.5 text-xs;
-        }
-        
-        .btn-outline-primary {
-            @apply text-indigo-400 border border-indigo-400 hover:bg-indigo-400/10;
-        }
-        
-        .btn-outline-danger {
-            @apply text-red-400 border border-red-400 hover:bg-red-400/10;
-        }
-        
-        /* Forms */
-        .form-control, .form-select {
-            @apply w-full px-4 py-2.5 bg-slate-700/50 border border-slate-600 rounded-lg text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all;
-        }
-        
-        .form-label {
-            @apply block text-sm font-semibold text-slate-300 mb-2;
-        }
-        
-        /* Tables */
-        .table {
-            @apply w-full text-sm;
-        }
-        
-        .table thead th {
-            @apply bg-slate-700/50 px-4 py-3 text-left font-bold text-slate-200 border-b border-slate-600;
-        }
-        
-        .table tbody td {
-            @apply px-4 py-3 border-b border-slate-700;
-        }
-        
-        .table tbody tr {
-            @apply hover:bg-slate-700/30 transition-colors;
-        }
-        
-        /* Badges */
-        .badge {
-            @apply inline-block px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300;
-        }
-        
-        /* Alerts */
-        .alert {
-            @apply px-4 py-3 rounded-lg border flex items-start justify-between;
-        }
-        
-        .alert-info {
-            @apply bg-indigo-500/10 border-indigo-500/30 text-indigo-200;
-        }
-        
-        .btn-close {
-            @apply text-slate-400 hover:text-slate-200 cursor-pointer;
-        }
-        
-        /* Headings */
-        h1, h2, h3, h4, h5, h6 {
-            @apply text-slate-100 font-bold;
-        }
-        
-        h1 {
-            @apply text-3xl mb-6;
-        }
-        
-        h2 {
-            @apply text-2xl mb-6;
-        }
-        
-        /* Progress bars */
-        .progress {
-            @apply w-full h-1.5 bg-slate-700 rounded-full overflow-hidden;
-        }
-        
-        .progress-bar {
-            @apply bg-gradient-to-r from-emerald-500 to-indigo-500 h-full;
-        }
-        
-        /* Stat cards */
-        .stat-card {
-            @apply bg-slate-800/60 border border-slate-700 rounded-xl p-6 text-center hover:border-indigo-500/50 transition-colors;
-        }
-        
-        .stat-card h3 {
-            @apply text-3xl font-bold text-indigo-400 mb-1;
-        }
-        
-        .stat-card p {
-            @apply text-slate-400 m-0;
-        }
-        
-        .stat-card i {
-            @apply text-2xl mb-3;
-        }
-        
-        /* Pagination */
-        .pagination {
-            @apply flex gap-2 justify-center;
-        }
-        
-        .page-link {
-            @apply px-3 py-2 rounded-lg text-indigo-400 border border-slate-600 hover:bg-slate-700/50 transition-colors;
-        }
-        
-        .page-item.active .page-link {
-            @apply bg-indigo-600 text-white border-indigo-600;
-        }
-        
-        .page-item.disabled .page-link {
-            @apply text-slate-500 cursor-not-allowed;
-        }
-        
-        /* Utility */
-        main {
-            @apply container mx-auto px-4 py-8 max-w-7xl;
-        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #6366f1; }
+
+        /* Mobile menu toggle */
+        #mobile-menu { display: none; }
+        #mobile-menu.open { display: block; }
     </style>
 </head>
-<body>
-    <!-- Modern FinTech Navbar -->
-    <nav class="border-b border-slate-800">
-        <div class="container mx-auto px-4 max-w-7xl">
+<body class="bg-slate-950 text-slate-200 min-h-screen bg-grid antialiased">
+
+    <!-- ── Navbar ── -->
+    <nav class="sticky top-0 z-50 border-b border-slate-800/60 bg-slate-950/90 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
+
                 <!-- Brand -->
-                <a href="{{ url_for('index') }}" class="navbar-brand">
-                    <i class="fas fa-wallet text-indigo-400"></i>
-                    <span>FinTrack</span>
+                <a href="{{ url_for('index') }}" class="flex items-center gap-2.5 group">
+                    <div class="w-8 h-8 rounded-lg bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center group-hover:bg-indigo-500/30 transition-colors">
+                        <i class="fas fa-wallet text-indigo-400 text-xs"></i>
+                    </div>
+                    <span class="font-display font-700 text-lg text-white tracking-tight">Fin<span class="text-indigo-400">Track</span></span>
                 </a>
-                
+
                 {% if current_user.is_authenticated %}
-                <!-- Navigation Links -->
-                <div class="hidden md:flex items-center gap-8">
-                    <a href="{{ url_for('dashboard') }}" class="nav-link {% if request.endpoint == 'dashboard' %}active{% endif %}">
-                        Dashboard
+                <!-- Desktop Nav -->
+                <div class="hidden md:flex items-center gap-1">
+                    <a href="{{ url_for('dashboard') }}"
+                       class="px-3 py-1.5 text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800 rounded-md transition-all duration-150 {% if request.endpoint == 'dashboard' %}nav-link-active text-indigo-300{% endif %}">
+                        <i class="fas fa-th-large mr-1.5 opacity-70"></i>Dashboard
                     </a>
-                    <a href="{{ url_for('expenses') }}" class="nav-link {% if request.endpoint == 'expenses' %}active{% endif %}">
-                        Expenses
+                    <a href="{{ url_for('expenses') }}"
+                       class="px-3 py-1.5 text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800 rounded-md transition-all duration-150 {% if request.endpoint == 'expenses' %}nav-link-active text-indigo-300{% endif %}">
+                        <i class="fas fa-list mr-1.5 opacity-70"></i>Expenses
                     </a>
-                    <a href="{{ url_for('add_expense') }}" class="nav-link {% if request.endpoint == 'add_expense' %}active{% endif %}">
-                        Add Expense
+                    <a href="{{ url_for('add_expense') }}"
+                       class="px-3 py-1.5 text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800 rounded-md transition-all duration-150 {% if request.endpoint == 'add_expense' %}nav-link-active text-indigo-300{% endif %}">
+                        <i class="fas fa-plus mr-1.5 opacity-70"></i>Add
                     </a>
-                    <a href="{{ url_for('analytics') }}" class="nav-link {% if request.endpoint == 'analytics' %}active{% endif %}">
-                        Analytics
+                    <a href="{{ url_for('analytics') }}"
+                       class="px-3 py-1.5 text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800 rounded-md transition-all duration-150 {% if request.endpoint == 'analytics' %}nav-link-active text-indigo-300{% endif %}">
+                        <i class="fas fa-chart-bar mr-1.5 opacity-70"></i>Analytics
                     </a>
                 </div>
-                
+
                 <!-- User Menu -->
-                <div class="flex items-center gap-4">
+                <div class="hidden md:flex items-center gap-3">
                     <div class="relative group">
-                        <button class="text-slate-300 hover:text-indigo-400 flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-700/50">
-                            <i class="fas fa-user-circle"></i>
-                            <span class="text-sm font-medium">{{ current_user.username }}</span>
+                        <button class="flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition-all">
+                            <div class="w-6 h-6 rounded-full bg-indigo-500/30 border border-indigo-500/40 flex items-center justify-center text-xs text-indigo-300 font-display font-bold">
+                                {{ current_user.username[0].upper() }}
+                            </div>
+                            {{ current_user.username }}
+                            <i class="fas fa-chevron-down text-xs opacity-50"></i>
                         </button>
-                        <div class="absolute right-0 mt-0 w-48 bg-slate-800 border border-slate-700 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-                            <a href="{{ url_for('export_csv') }}" class="block px-4 py-2 text-slate-300 hover:text-indigo-400 hover:bg-slate-700/50 first:rounded-t-lg">
-                                <i class="fas fa-download me-2"></i>Export CSV
+                        <!-- Dropdown -->
+                        <div class="absolute right-0 top-full mt-1 w-48 bg-slate-900 border border-slate-700 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50">
+                            <a href="{{ url_for('export_csv') }}" class="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-300 hover:text-white hover:bg-slate-800 rounded-t-lg transition-colors">
+                                <i class="fas fa-download w-4 text-slate-500"></i>Export CSV
                             </a>
-                            <a href="{{ url_for('logout') }}" class="block px-4 py-2 text-slate-300 hover:text-red-400 hover:bg-slate-700/50 last:rounded-b-lg border-t border-slate-700">
-                                <i class="fas fa-sign-out-alt me-2"></i>Logout
+                            <div class="border-t border-slate-700/50"></div>
+                            <a href="{{ url_for('logout') }}" class="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-300 hover:text-rose-400 hover:bg-slate-800 rounded-b-lg transition-colors">
+                                <i class="fas fa-sign-out-alt w-4 text-slate-500"></i>Logout
                             </a>
                         </div>
                     </div>
                 </div>
+
+                <!-- Mobile Hamburger -->
+                <button onclick="document.getElementById('mobile-menu').classList.toggle('open')"
+                        class="md:hidden p-2 rounded-md text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">
+                    <i class="fas fa-bars"></i>
+                </button>
                 {% endif %}
             </div>
         </div>
+
+        {% if current_user.is_authenticated %}
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="md:hidden border-t border-slate-800/60 bg-slate-950/95">
+            <div class="px-4 py-3 space-y-1">
+                <a href="{{ url_for('dashboard') }}" class="flex items-center gap-2 px-3 py-2 text-sm rounded-md text-slate-300 hover:bg-slate-800 hover:text-white transition-colors">
+                    <i class="fas fa-th-large w-4 text-slate-500"></i>Dashboard
+                </a>
+                <a href="{{ url_for('expenses') }}" class="flex items-center gap-2 px-3 py-2 text-sm rounded-md text-slate-300 hover:bg-slate-800 hover:text-white transition-colors">
+                    <i class="fas fa-list w-4 text-slate-500"></i>Expenses
+                </a>
+                <a href="{{ url_for('add_expense') }}" class="flex items-center gap-2 px-3 py-2 text-sm rounded-md text-slate-300 hover:bg-slate-800 hover:text-white transition-colors">
+                    <i class="fas fa-plus w-4 text-slate-500"></i>Add Expense
+                </a>
+                <a href="{{ url_for('analytics') }}" class="flex items-center gap-2 px-3 py-2 text-sm rounded-md text-slate-300 hover:bg-slate-800 hover:text-white transition-colors">
+                    <i class="fas fa-chart-bar w-4 text-slate-500"></i>Analytics
+                </a>
+                <div class="border-t border-slate-800 pt-2 mt-2 space-y-1">
+                    <a href="{{ url_for('export_csv') }}" class="flex items-center gap-2 px-3 py-2 text-sm rounded-md text-slate-300 hover:bg-slate-800 hover:text-white transition-colors">
+                        <i class="fas fa-download w-4 text-slate-500"></i>Export CSV
+                    </a>
+                    <a href="{{ url_for('logout') }}" class="flex items-center gap-2 px-3 py-2 text-sm rounded-md text-slate-300 hover:bg-rose-900/40 hover:text-rose-400 transition-colors">
+                        <i class="fas fa-sign-out-alt w-4 text-slate-500"></i>Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
     </nav>
 
-    <main>
-        <!-- Flash Messages -->
+    <!-- ── Flash Messages ── -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
         {% with messages = get_flashed_messages() %}
             {% if messages %}
                 {% for message in messages %}
-                    <div class="alert alert-info mb-6" role="alert">
-                        <div class="flex items-center gap-3">
-                            <i class="fas fa-check-circle"></i>
-                            <span>{{ message }}</span>
-                        </div>
-                        <button type="button" class="btn-close" onclick="this.parentElement.style.display='none';">
-                            <i class="fas fa-times"></i>
-                        </button>
+                <div class="flex items-center justify-between gap-3 mb-3 px-4 py-3 rounded-lg border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 text-sm"
+                     role="alert">
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-info-circle"></i>
+                        <span>{{ message }}</span>
                     </div>
+                    <button onclick="this.parentElement.remove()" class="text-indigo-400 hover:text-white transition-colors">
+                        <i class="fas fa-times text-xs"></i>
+                    </button>
+                </div>
                 {% endfor %}
             {% endif %}
         {% endwith %}
+    </div>
 
+    <!-- ── Page Content ── -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {% block content %}{% endblock %}
     </main>
+
+    <!-- ── Footer ── -->
+    <footer class="border-t border-slate-800/60 mt-16 py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-600">
+            <span class="font-display">Fin<span class="text-indigo-800">Track</span></span>
+            <span>Track smarter. Spend wiser.</span>
+        </div>
+    </footer>
+
 </body>
 </html>
