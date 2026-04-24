@@ -3,50 +3,50 @@
 {% block title %}Analytics - FinTrack{% endblock %}
 
 {% block content %}
-<h2 class="mb-5">Analytics</h2>
+<h2 class="mb-8">Analytics</h2>
 
-<div class="row">
-    <div class="col-lg-8 mb-4">
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+    <!-- Monthly Spending Trend -->
+    <div class="lg:col-span-2">
         <div class="card">
             <div class="card-header">
                 <h5>Monthly Spending Trend</h5>
             </div>
-            <div class="card-body" style="padding: 0;">
-                <div class="table-responsive">
-                    <table class="table" style="margin: 0;">
-                        <thead>
-                            <tr>
-                                <th>Month</th>
-                                <th>Total Spent</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for data in monthly_data %}
-                            <tr>
-                                <td>{{ data.month }} {{ data.year }}</td>
-                                <td style="font-weight: 600; color: #3498db;">₹{{ "%.2f"|format(data.total) }}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+            <div class="overflow-x-auto">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Month</th>
+                            <th>Total Spent</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for data in monthly_data %}
+                        <tr>
+                            <td class="text-slate-300">{{ data.month }} {{ data.year }}</td>
+                            <td class="font-semibold text-indigo-300">₹{{ "%.2f"|format(data.total) }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
     
-    <div class="col-lg-4 mb-4">
+    <!-- Category Totals -->
+    <div>
         <div class="card">
             <div class="card-header">
                 <h5>Category Totals</h5>
             </div>
-            <div class="card-body">
+            <div class="card-body space-y-4">
                 {% if category_totals %}
                 {% set total_amount = category_totals | sum(attribute=1) %}
                 {% for category, amount in category_totals %}
-                <div style="margin-bottom: 1.5rem;">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                        <span style="font-weight: 500;">{{ category }}</span>
-                        <strong>₹{{ "%.2f"|format(amount) }}</strong>
+                <div>
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="font-medium text-slate-300">{{ category }}</span>
+                        <span class="font-bold text-indigo-300">₹{{ "%.2f"|format(amount) }}</span>
                     </div>
                     <div class="progress">
                         <div class="progress-bar" role="progressbar" 
@@ -55,11 +55,11 @@
                     </div>
                 </div>
                 {% endfor %}
-                <div style="text-align: center; padding-top: 1rem; border-top: 1px solid #ecf0f1; margin-top: 1rem;">
-                    <strong style="color: #3498db;">Total: ₹{{ "%.2f"|format(total_amount) }}</strong>
+                <div class="text-center pt-4 border-t border-slate-700 mt-4">
+                    <p class="font-bold text-indigo-300">Total: ₹{{ "%.2f"|format(total_amount) }}</p>
                 </div>
                 {% else %}
-                <p style="text-align: center; color: #7f8c8d;">No expenses logged yet</p>
+                <p class="text-center text-slate-400">No expenses logged yet</p>
                 {% endif %}
             </div>
         </div>
@@ -72,30 +72,22 @@
         <h5>Quick Stats</h5>
     </div>
     <div class="card-body">
-        <div class="row text-center">
-            <div class="col-md-6 col-lg-3 mb-3 mb-lg-0">
-                <div style="padding-bottom: 1rem;">
-                    <h3 style="color: #3498db;">₹{{ "%.2f"|format(monthly_data[-1].total if monthly_data else 0) }}</h3>
-                    <p style="color: #7f8c8d; margin: 0;">This Month</p>
-                </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            <div>
+                <h3 class="text-2xl font-bold text-indigo-300 mb-1">₹{{ "%.2f"|format(monthly_data[-1].total if monthly_data else 0) }}</h3>
+                <p class="text-slate-400 text-sm m-0">This Month</p>
             </div>
-            <div class="col-md-6 col-lg-3 mb-3 mb-lg-0">
-                <div style="padding-bottom: 1rem;">
-                    <h3 style="color: #3498db;">₹{{ "%.2f"|format((monthly_data | sum(attribute='total')) / 12 if monthly_data else 0) }}</h3>
-                    <p style="color: #7f8c8d; margin: 0;">Monthly Avg</p>
-                </div>
+            <div>
+                <h3 class="text-2xl font-bold text-indigo-300 mb-1">₹{{ "%.2f"|format((monthly_data | sum(attribute='total')) / 12 if monthly_data else 0) }}</h3>
+                <p class="text-slate-400 text-sm m-0">Monthly Avg</p>
             </div>
-            <div class="col-md-6 col-lg-3 mb-3 mb-lg-0">
-                <div style="padding-bottom: 1rem;">
-                    <h3 style="color: #3498db;">{{ category_totals | length }}</h3>
-                    <p style="color: #7f8c8d; margin: 0;">Categories</p>
-                </div>
+            <div>
+                <h3 class="text-2xl font-bold text-emerald-400 mb-1">{{ category_totals | length }}</h3>
+                <p class="text-slate-400 text-sm m-0">Categories</p>
             </div>
-            <div class="col-md-6 col-lg-3">
-                <div style="padding-bottom: 1rem;">
-                    <h3 style="color: #3498db;">₹{{ "%.2f"|format(category_totals | sum(attribute=1) if category_totals else 0) }}</h3>
-                    <p style="color: #7f8c8d; margin: 0;">Total Spent</p>
-                </div>
+            <div>
+                <h3 class="text-2xl font-bold text-indigo-300 mb-1">₹{{ "%.2f"|format(category_totals | sum(attribute=1) if category_totals else 0) }}</h3>
+                <p class="text-slate-400 text-sm m-0">Total Spent</p>
             </div>
         </div>
     </div>

@@ -3,96 +3,90 @@
 {% block title %}Expenses - FinTrack{% endblock %}
 
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 style="margin: 0;">Expenses</h2>
+<div class="flex justify-between items-center mb-8">
+    <h2 class="m-0">Expenses</h2>
     <a href="{{ url_for('add_expense') }}" class="btn btn-primary">
-        <i class="fas fa-plus me-2"></i>Add Expense
+        <i class="fas fa-plus"></i> Add Expense
     </a>
 </div>
 
 {% if expenses.items %}
 <div class="card">
-    <div class="card-body" style="padding: 0;">
-        <div class="table-responsive">
-            <table class="table" style="margin: 0;">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Description</th>
-                        <th>Category</th>
-                        <th>Amount</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for expense in expenses.items %}
-                    <tr>
-                        <td>{{ expense.date.strftime('%b %d, %Y') }}</td>
-                        <td>{{ expense.description }}</td>
-                        <td><span class="badge">{{ expense.category }}</span></td>
-                        <td style="font-weight: 600; color: #3498db;">₹{{ "%.2f"|format(expense.amount) }}</td>
-                        <td>
-                            <a href="{{ url_for('edit_expense', id=expense.id) }}" class="btn btn-sm btn-outline-primary me-2">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <a href="{{ url_for('delete_expense', id=expense.id) }}" 
-                               class="btn btn-sm btn-outline-danger"
-                               onclick="return confirm('Delete this expense?')">
-                                <i class="fas fa-trash"></i>
-                            </a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+    <div class="overflow-x-auto">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Category</th>
+                    <th>Amount</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for expense in expenses.items %}
+                <tr>
+                    <td class="text-slate-300">{{ expense.date.strftime('%b %d, %Y') }}</td>
+                    <td class="text-slate-300">{{ expense.description }}</td>
+                    <td><span class="badge">{{ expense.category }}</span></td>
+                    <td class="font-semibold text-indigo-300">₹{{ "%.2f"|format(expense.amount) }}</td>
+                    <td class="flex gap-2">
+                        <a href="{{ url_for('edit_expense', id=expense.id) }}" class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <a href="{{ url_for('delete_expense', id=expense.id) }}" 
+                           class="btn btn-sm btn-outline-danger"
+                           onclick="return confirm('Delete this expense?')">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 </div>
 
 <!-- Pagination -->
 {% if expenses.pages > 1 %}
-<nav aria-label="Page navigation" style="margin-top: 2rem;">
-    <ul class="pagination justify-content-center">
+<nav aria-label="Page navigation" class="mt-8">
+    <div class="pagination">
         {% if expenses.has_prev %}
-        <li class="page-item">
-            <a class="page-link" href="{{ url_for('expenses', page=expenses.prev_num) }}">Previous</a>
-        </li>
+        <a class="page-link" href="{{ url_for('expenses', page=expenses.prev_num) }}">
+            <i class="fas fa-chevron-left"></i> Previous
+        </a>
         {% endif %}
         
         {% for page_num in expenses.iter_pages() %}
             {% if page_num %}
                 {% if page_num != expenses.page %}
-                <li class="page-item">
-                    <a class="page-link" href="{{ url_for('expenses', page=page_num) }}">{{ page_num }}</a>
-                </li>
+                <a class="page-link" href="{{ url_for('expenses', page=page_num) }}">{{ page_num }}</a>
                 {% else %}
-                <li class="page-item active">
-                    <span class="page-link">{{ page_num }}</span>
-                </li>
+                <span class="page-link active">{{ page_num }}</span>
                 {% endif %}
             {% else %}
-            <li class="page-item disabled">
-                <span class="page-link">...</span>
-            </li>
+            <span class="page-link disabled">...</span>
             {% endif %}
         {% endfor %}
         
         {% if expenses.has_next %}
-        <li class="page-item">
-            <a class="page-link" href="{{ url_for('expenses', page=expenses.next_num) }}">Next</a>
-        </li>
+        <a class="page-link" href="{{ url_for('expenses', page=expenses.next_num) }}">
+            Next <i class="fas fa-chevron-right"></i>
+        </a>
         {% endif %}
-    </ul>
+    </div>
 </nav>
 {% endif %}
 {% else %}
-<div style="text-align: center; padding: 3rem;">
-    <div style="font-size: 3rem; color: #bdc3c7; margin-bottom: 1rem;">
-        <i class="fas fa-receipt"></i>
+<div class="text-center py-16">
+    <div class="text-5xl text-slate-600 mb-4">
+        <i class="fas fa-inbox"></i>
     </div>
-    <h4>No expenses yet</h4>
-    <p style="color: #7f8c8d; margin-bottom: 1.5rem;">Start tracking your expenses</p>
-    <a href="{{ url_for('add_expense') }}" class="btn btn-primary">Add Your First Expense</a>
+    <h4 class="text-xl font-bold text-slate-300 mb-2">No expenses yet</h4>
+    <p class="text-slate-400 mb-6">Start tracking your expenses</p>
+    <a href="{{ url_for('add_expense') }}" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Add Your First Expense
+    </a>
 </div>
 {% endif %}
 {% endblock %}

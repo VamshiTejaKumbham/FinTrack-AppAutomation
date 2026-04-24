@@ -1,56 +1,44 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-lg-10">
-        <!-- Hero Section -->
-        <div style="text-align: center; padding: 3rem 0;">
-            <h1 style="font-size: 2.5rem; margin-bottom: 1rem;">FinTrack</h1>
-            <p style="font-size: 1.1rem; color: #7f8c8d; margin-bottom: 3rem;">
-                Simple, elegant expense tracking for mindful financial management
-            </p>
-        </div>
+<div class="min-h-[calc(100vh-4rem)] flex flex-col justify-center">
+    <!-- Hero Section -->
+    <div class="text-center mb-16">
+        <h1 class="text-5xl font-bold mb-4 bg-gradient-to-r from-indigo-400 via-indigo-300 to-emerald-400 bg-clip-text text-transparent">
+            FinTrack
+        </h1>
+        <p class="text-xl text-slate-300 mb-8 max-w-2xl mx-auto">
+            Simple, elegant expense tracking for mindful financial management
+        </p>
+    </div>
 
-        <!-- Features Grid -->
-        <div class="row mb-5">
-            <div class="col-md-4 mb-3">
-                <div class="stat-card">
-                    <div style="font-size: 2rem; margin-bottom: 1rem;">
-                        <i class="fas fa-plus-circle" style="color: #3498db;"></i>
-                    </div>
-                    <h5>Track Easily</h5>
-                    <p style="color: #7f8c8d; margin: 0;">Add, edit, and categorize your expenses with ease</p>
-                </div>
-            </div>
-            <div class="col-md-4 mb-3">
-                <div class="stat-card">
-                    <div style="font-size: 2rem; margin-bottom: 1rem;">
-                        <i class="fas fa-chart-line" style="color: #3498db;"></i>
-                    </div>
-                    <h5>Analyze Spending</h5>
-                    <p style="color: #7f8c8d; margin: 0;">View detailed analytics and spending patterns</p>
-                </div>
-            </div>
-            <div class="col-md-4 mb-3">
-                <div class="stat-card">
-                    <div style="font-size: 2rem; margin-bottom: 1rem;">
-                        <i class="fas fa-download" style="color: #3498db;"></i>
-                    </div>
-                    <h5>Export Data</h5>
-                    <p style="color: #7f8c8d; margin: 0;">Download your data as CSV anytime</p>
-                </div>
-            </div>
+    <!-- Features Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        <div class="stat-card border-b-2 border-indigo-500/30">
+            <i class="fas fa-plus-circle text-indigo-400"></i>
+            <h5 class="font-bold text-lg mt-4 mb-2">Track Easily</h5>
+            <p class="text-slate-400">Add, edit, and categorize your expenses with ease</p>
         </div>
+        <div class="stat-card border-b-2 border-emerald-500/30">
+            <i class="fas fa-chart-line text-emerald-400"></i>
+            <h5 class="font-bold text-lg mt-4 mb-2">Analyze Spending</h5>
+            <p class="text-slate-400">View detailed analytics and spending patterns</p>
+        </div>
+        <div class="stat-card border-b-2 border-indigo-500/30">
+            <i class="fas fa-download text-indigo-400"></i>
+            <h5 class="font-bold text-lg mt-4 mb-2">Export Data</h5>
+            <p class="text-slate-400">Download your data as CSV anytime</p>
+        </div>
+    </div>
 
-        <!-- CTA Buttons -->
-        <div style="text-align: center; margin-top: 3rem;">
-            <a class="btn btn-primary btn-lg me-3" href="{{ url_for('register') }}">
-                Get Started
-            </a>
-            <a class="btn btn-secondary btn-lg" href="{{ url_for('login') }}">
-                Sign In
-            </a>
-        </div>
+    <!-- CTA Buttons -->
+    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <a href="{{ url_for('register') }}" class="btn btn-primary px-8 py-3 text-lg">
+            <i class="fas fa-rocket"></i> Get Started
+        </a>
+        <a href="{{ url_for('login') }}" class="btn btn-secondary px-8 py-3 text-lg">
+            <i class="fas fa-sign-in-alt"></i> Sign In
+        </a>
     </div>
 </div>
 {% endblock %}

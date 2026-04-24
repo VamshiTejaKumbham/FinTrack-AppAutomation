@@ -1,315 +1,249 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Expense Tracker{% endblock %}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <!-- Added custom minimalist styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        :root {
-            --primary: #2c3e50;
-            --secondary: #34495e;
-            --accent: #3498db;
-            --background: #ecf0f1;
-            --surface: #ffffff;
-            --text-primary: #2c3e50;
-            --text-secondary: #7f8c8d;
-            --border: #bdc3c7;
-        }
-
         * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+            @apply transition-colors duration-200;
         }
-
+        
         body {
-            background-color: var(--background);
-            color: var(--text-primary);
+            @apply bg-slate-950 text-slate-100 antialiased;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            font-size: 15px;
-            line-height: 1.6;
         }
-
-        /* Navbar minimalist styling */
-        .navbar {
-            background-color: var(--surface) !important;
-            border-bottom: 1px solid var(--border);
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-            padding: 1rem 0;
+        
+        /* Navbar */
+        nav {
+            @apply border-b border-slate-800 bg-slate-900/50 backdrop-blur-sm sticky top-0 z-50;
         }
-
+        
         .navbar-brand {
-            color: var(--primary) !important;
-            font-weight: 700;
-            font-size: 1.3rem;
-            letter-spacing: -0.5px;
+            @apply text-xl font-bold text-indigo-400 flex items-center gap-2;
         }
-
+        
         .nav-link {
-            color: var(--text-secondary) !important;
-            font-weight: 500;
-            margin: 0 0.5rem;
-            transition: color 0.2s ease;
+            @apply text-slate-300 font-medium text-sm hover:text-indigo-400 px-3 py-2 rounded-lg transition-colors;
         }
-
-        .nav-link:hover {
-            color: var(--accent) !important;
+        
+        .nav-link.active {
+            @apply text-indigo-400 bg-indigo-400/10;
         }
-
-        /* Cards minimalist */
+        
+        /* Cards */
         .card {
-            border: 1px solid var(--border);
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-            background-color: var(--surface);
+            @apply bg-slate-800/50 border border-slate-700 rounded-xl shadow-lg hover:shadow-xl transition-shadow overflow-hidden;
         }
-
+        
         .card-header {
-            background-color: transparent;
-            border-bottom: 1px solid var(--border);
-            padding: 1.5rem;
+            @apply px-6 py-4 border-b border-slate-700 bg-slate-800/30;
         }
-
+        
         .card-header h5 {
-            font-weight: 700;
-            color: var(--primary);
-            margin: 0;
+            @apply text-lg font-bold text-slate-100 m-0;
         }
-
+        
         .card-body {
-            padding: 1.5rem;
+            @apply p-6;
         }
-
+        
         /* Buttons */
         .btn {
-            font-weight: 600;
-            border-radius: 6px;
-            border: none;
-            transition: all 0.2s ease;
-            padding: 0.5rem 1.25rem;
+            @apply inline-flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-200;
         }
-
+        
         .btn-primary {
-            background-color: var(--accent);
-            color: white;
+            @apply bg-indigo-600 text-white hover:bg-indigo-500 active:scale-95 shadow-lg hover:shadow-indigo-500/30;
         }
-
-        .btn-primary:hover {
-            background-color: #2980b9;
-            color: white;
-        }
-
+        
         .btn-secondary {
-            background-color: var(--border);
-            color: var(--primary);
+            @apply bg-slate-700 text-slate-200 hover:bg-slate-600 active:scale-95;
         }
-
-        .btn-secondary:hover {
-            background-color: #95a5a6;
-            color: var(--primary);
+        
+        .btn-sm {
+            @apply px-3 py-1.5 text-xs;
         }
-
+        
+        .btn-outline-primary {
+            @apply text-indigo-400 border border-indigo-400 hover:bg-indigo-400/10;
+        }
+        
+        .btn-outline-danger {
+            @apply text-red-400 border border-red-400 hover:bg-red-400/10;
+        }
+        
         /* Forms */
         .form-control, .form-select {
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            background-color: var(--surface);
-            color: var(--text-primary);
-            padding: 0.75rem 1rem;
-            transition: border-color 0.2s ease;
+            @apply w-full px-4 py-2.5 bg-slate-700/50 border border-slate-600 rounded-lg text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all;
         }
-
-        .form-control:focus, .form-select:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.1);
-            background-color: var(--surface);
-            color: var(--text-primary);
-        }
-
+        
         .form-label {
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 0.5rem;
+            @apply block text-sm font-semibold text-slate-300 mb-2;
         }
-
+        
         /* Tables */
         .table {
-            border-collapse: collapse;
-            color: var(--text-primary);
+            @apply w-full text-sm;
         }
-
+        
         .table thead th {
-            background-color: #f8f9fa;
-            border-bottom: 2px solid var(--border);
-            font-weight: 700;
-            color: var(--primary);
-            padding: 1rem;
+            @apply bg-slate-700/50 px-4 py-3 text-left font-bold text-slate-200 border-b border-slate-600;
         }
-
+        
         .table tbody td {
-            padding: 1rem;
-            border-bottom: 1px solid var(--border);
+            @apply px-4 py-3 border-b border-slate-700;
         }
-
-        .table tbody tr:hover {
-            background-color: #f8f9fa;
+        
+        .table tbody tr {
+            @apply hover:bg-slate-700/30 transition-colors;
         }
-
+        
         /* Badges */
         .badge {
-            border-radius: 4px;
-            font-weight: 600;
-            padding: 0.4rem 0.8rem;
-            background-color: var(--background) !important;
-            color: var(--text-secondary) !important;
+            @apply inline-block px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300;
         }
-
+        
         /* Alerts */
         .alert {
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            background-color: var(--surface);
-            color: var(--text-primary);
+            @apply px-4 py-3 rounded-lg border flex items-start justify-between;
         }
-
-        /* Main container */
-        main {
-            padding: 2rem 1rem;
+        
+        .alert-info {
+            @apply bg-indigo-500/10 border-indigo-500/30 text-indigo-200;
         }
-
+        
+        .btn-close {
+            @apply text-slate-400 hover:text-slate-200 cursor-pointer;
+        }
+        
         /* Headings */
         h1, h2, h3, h4, h5, h6 {
-            color: var(--primary);
-            font-weight: 700;
-            margin-bottom: 1.5rem;
+            @apply text-slate-100 font-bold;
         }
-
+        
+        h1 {
+            @apply text-3xl mb-6;
+        }
+        
+        h2 {
+            @apply text-2xl mb-6;
+        }
+        
         /* Progress bars */
         .progress {
-            background-color: #ecf0f1;
-            border-radius: 4px;
-            height: 6px;
+            @apply w-full h-1.5 bg-slate-700 rounded-full overflow-hidden;
         }
-
+        
         .progress-bar {
-            background-color: var(--accent);
+            @apply bg-gradient-to-r from-emerald-500 to-indigo-500 h-full;
         }
-
-        /* Stat cards on dashboard */
+        
+        /* Stat cards */
         .stat-card {
-            background-color: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 1.5rem;
-            text-align: center;
+            @apply bg-slate-800/60 border border-slate-700 rounded-xl p-6 text-center hover:border-indigo-500/50 transition-colors;
         }
-
+        
         .stat-card h3 {
-            color: var(--accent);
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
+            @apply text-3xl font-bold text-indigo-400 mb-1;
         }
-
+        
         .stat-card p {
-            color: var(--text-secondary);
-            margin: 0;
+            @apply text-slate-400 m-0;
         }
-
-        /* Table actions */
-        .btn-outline-primary {
-            color: var(--accent);
-            border-color: var(--accent);
+        
+        .stat-card i {
+            @apply text-2xl mb-3;
         }
-
-        .btn-outline-primary:hover {
-            background-color: var(--accent);
-            color: white;
-            border-color: var(--accent);
-        }
-
-        .btn-outline-danger {
-            color: #e74c3c;
-            border-color: #e74c3c;
-        }
-
-        .btn-outline-danger:hover {
-            background-color: #e74c3c;
-            color: white;
-            border-color: #e74c3c;
-        }
-
+        
         /* Pagination */
-        .pagination .page-link {
-            color: var(--accent);
-            border-color: var(--border);
-            background-color: var(--surface);
+        .pagination {
+            @apply flex gap-2 justify-center;
         }
-
-        .pagination .page-link:hover {
-            background-color: var(--background);
-            color: var(--accent);
+        
+        .page-link {
+            @apply px-3 py-2 rounded-lg text-indigo-400 border border-slate-600 hover:bg-slate-700/50 transition-colors;
         }
-
-        .pagination .page-item.active .page-link {
-            background-color: var(--accent);
-            border-color: var(--accent);
+        
+        .page-item.active .page-link {
+            @apply bg-indigo-600 text-white border-indigo-600;
+        }
+        
+        .page-item.disabled .page-link {
+            @apply text-slate-500 cursor-not-allowed;
+        }
+        
+        /* Utility */
+        main {
+            @apply container mx-auto px-4 py-8 max-w-7xl;
         }
     </style>
 </head>
 <body>
-    <!-- Minimalist navbar with subtle styling -->
-    <nav class="navbar navbar-expand-lg navbar-light">
-        <div class="container-lg">
-            <a class="navbar-brand" href="{{ url_for('index') }}">
-                <i class="fas fa-wallet me-2"></i>FinTrack</a>
-            
-            {% if current_user.is_authenticated %}
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('expenses') }}">Expenses</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('add_expense') }}">Add Expense</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('analytics') }}">Analytics</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
-                            {{ current_user.username }}
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ url_for('export_csv') }}">
+    <!-- Modern FinTech Navbar -->
+    <nav class="border-b border-slate-800">
+        <div class="container mx-auto px-4 max-w-7xl">
+            <div class="flex items-center justify-between h-16">
+                <!-- Brand -->
+                <a href="{{ url_for('index') }}" class="navbar-brand">
+                    <i class="fas fa-wallet text-indigo-400"></i>
+                    <span>FinTrack</span>
+                </a>
+                
+                {% if current_user.is_authenticated %}
+                <!-- Navigation Links -->
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="{{ url_for('dashboard') }}" class="nav-link {% if request.endpoint == 'dashboard' %}active{% endif %}">
+                        Dashboard
+                    </a>
+                    <a href="{{ url_for('expenses') }}" class="nav-link {% if request.endpoint == 'expenses' %}active{% endif %}">
+                        Expenses
+                    </a>
+                    <a href="{{ url_for('add_expense') }}" class="nav-link {% if request.endpoint == 'add_expense' %}active{% endif %}">
+                        Add Expense
+                    </a>
+                    <a href="{{ url_for('analytics') }}" class="nav-link {% if request.endpoint == 'analytics' %}active{% endif %}">
+                        Analytics
+                    </a>
+                </div>
+                
+                <!-- User Menu -->
+                <div class="flex items-center gap-4">
+                    <div class="relative group">
+                        <button class="text-slate-300 hover:text-indigo-400 flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-700/50">
+                            <i class="fas fa-user-circle"></i>
+                            <span class="text-sm font-medium">{{ current_user.username }}</span>
+                        </button>
+                        <div class="absolute right-0 mt-0 w-48 bg-slate-800 border border-slate-700 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                            <a href="{{ url_for('export_csv') }}" class="block px-4 py-2 text-slate-300 hover:text-indigo-400 hover:bg-slate-700/50 first:rounded-t-lg">
                                 <i class="fas fa-download me-2"></i>Export CSV
-                            </a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="{{ url_for('logout') }}">
+                            </a>
+                            <a href="{{ url_for('logout') }}" class="block px-4 py-2 text-slate-300 hover:text-red-400 hover:bg-slate-700/50 last:rounded-b-lg border-t border-slate-700">
                                 <i class="fas fa-sign-out-alt me-2"></i>Logout
-                            </a></li>
-                        </ul>
-                    </li>
-                </ul>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
             </div>
-            {% endif %}
         </div>
     </nav>
 
-    <main class="container-lg">
+    <main>
+        <!-- Flash Messages -->
         {% with messages = get_flashed_messages() %}
             {% if messages %}
                 {% for message in messages %}
-                    <div class="alert alert-info alert-dismissible fade show" role="alert">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    <div class="alert alert-info mb-6" role="alert">
+                        <div class="flex items-center gap-3">
+                            <i class="fas fa-check-circle"></i>
+                            <span>{{ message }}</span>
+                        </div>
+                        <button type="button" class="btn-close" onclick="this.parentElement.style.display='none';">
+                            <i class="fas fa-times"></i>
+                        </button>
                     </div>
                 {% endfor %}
             {% endif %}
@@ -317,7 +251,5 @@
 
         {% block content %}{% endblock %}
     </main>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
